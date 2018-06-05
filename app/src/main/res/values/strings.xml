@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SeniorProject</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="signout">Do you want to sign out?</string>
+    <string name="okay">Okay</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_user">No User Selected</string>
+    <string name="pls_sign">Please Sign In</string>
+    <string name="signed_in_as">Signed in as: </string>
+    <string name="please_sign_in">Please sign in to continue!</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
