@@ -44,7 +44,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/ActiveCheck"
+                        android:id="@+id/timeCheck"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="344dp"
@@ -54,7 +54,7 @@
                         tools:layout_editor_absoluteY="16dp" />
 
                     <Switch
-                        android:id="@+id/switch2"
+                        android:id="@+id/alarmSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -63,18 +63,17 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/imageButton"
+                        android:id="@+id/alarmMoreButton"
                         style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:text="More"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:srcCompat="?android:attr/findOnPageNextDrawable"
                         tools:layout_editor_absoluteY="70dp" />
 
                     <TextView
-                        android:id="@+id/TimeView"
+                        android:id="@+id/alarmTimeView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -82,37 +81,39 @@
                         android:text="Time"
                         android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                        app:layout_constraintStart_toEndOf="@+id/ActiveCheck"
+                        app:layout_constraintStart_toEndOf="@+id/timeCheck"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/DateView"
+                        android:id="@+id/alarmDateView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:text="Date"
-                        app:layout_constraintStart_toStartOf="@+id/TimeView"
-                        app:layout_constraintTop_toBottomOf="@+id/TimeView" />
+                        app:layout_constraintStart_toStartOf="@+id/alarmTimeView"
+                        app:layout_constraintTop_toBottomOf="@+id/alarmTimeView" />
 
                     <ListView
+                        android:id="@+id/alarm_dynamic"
                         android:layout_width="152dp"
                         android:layout_height="62dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintBottom_toTopOf="@+id/imageButton"
-                        app:layout_constraintEnd_toStartOf="@+id/switch2"
-                        app:layout_constraintHorizontal_bias="0.689"
-                        app:layout_constraintStart_toEndOf="@+id/TimeView"
+                        app:layout_constraintBottom_toTopOf="@+id/alarmMoreButton"
+                        app:layout_constraintEnd_toStartOf="@+id/alarmSwitch"
+                        app:layout_constraintHorizontal_bias="0.376"
+                        app:layout_constraintStart_toEndOf="@+id/alarmTimeView"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.727" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/weekLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
@@ -121,7 +122,7 @@
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ActiveCheck">
+                app:layout_constraintStart_toEndOf="@+id/timeCheck">
 
                 <TableLayout
                     android:id="@+id/tableLayout"
@@ -249,7 +250,7 @@
                 </TableLayout>
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/alarmEditButton"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
