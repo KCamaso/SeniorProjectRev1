@@ -46,6 +46,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             activeSwitch = (Switch) itemView.findViewById(R.id.alarmSwitch);
             moreButt = (Button) itemView.findViewById(R.id.alarmMoreButton);
             editButt = (Button) itemView.findViewById(R.id.weekLayout);
+            weekLayout = (ConstraintLayout) itemView.findViewById(R.id.weekLayout);
 
 
         }
@@ -80,7 +81,12 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i)
     {
-        // Set resources here
+        for(int n = 0; n < i; i++)
+        {
+            viewHolder.statusImage.setImageTintMode( mAlarms.get(i).get);
+
+
+        }
 
     }
 
