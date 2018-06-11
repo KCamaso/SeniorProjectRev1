@@ -5,55 +5,74 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by camasok on 2/16/2018.
  */
 
-public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ItemViewHolder>{
+public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHolder>{
 
-    public static class ItemViewHolder extends  RecyclerView.ViewHolder
+
+    public List<HistoryObj> mHistory;
+    public static class ViewHolder extends  RecyclerView.ViewHolder
     {
 
-        ItemViewHolder(View itemView){
+        ImageView timeCheck;
+        TextView timeText;
+        TextView missView;
+        TextView dateView;
+        Button buttonDelete;
+        TextView histList;
+
+
+
+
+        ViewHolder(View itemView){
          super(itemView);
+
+         timeCheck = (ImageView) itemView.findViewById(R.id.timeCheck);
+         timeText = (TextView) itemView.findViewById(R.id.timeText);
+         missView = (TextView) itemView.findViewById(R.id.missView);
+         dateView = (TextView) itemView.findViewById(R.id.dateView);
+         buttonDelete = (Button) itemView.findViewById(R.id.buttonDelete);
 
         }
     }
 
-    List<HistoryObj> battleItemListing;
-    HistoryAdapter(List<HistoryObj> battleItemListing)
+
+    HistoryAdapter(List<HistoryObj> historum)
     {
-        this.battleItemListing = battleItemListing;
+        mHistory = historum;
     }
 
 
     @Override
     public int getItemCount()
     {
-        return battleItemListing.size();
+        return mHistory.size();
     }
 
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
     {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_layout_history, viewGroup, false);
-        ItemViewHolder ivh = new ItemViewHolder(v);
+        ViewHolder ivh = new ViewHolder(v);
 
         return ivh;
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder itemViewHolder, int i)
+    public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
+        for(int n = 0; n < i; i++)
+        {
 
+        }
     }
 
     @Override

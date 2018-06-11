@@ -83,8 +83,6 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     {
         for(int n = 0; n < i; i++)
         {
-            viewHolder.statusImage.setImageTintMode( mAlarms.get(i).get);
-
 
         }
 

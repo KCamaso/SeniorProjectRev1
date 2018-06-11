@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,17 +19,37 @@ import java.util.Random;
  * Created by camasok on 2/16/2018.
  */
 
-public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.ItemViewHolder>{
+public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.ViewHolder>{
 
-    public static class ItemViewHolder extends  RecyclerView.ViewHolder
+    List<MedObj>medItemListing;
+    public static class ViewHolder extends  RecyclerView.ViewHolder
     {
+        ImageView timeCheck;
+        TextView timeText;
+        TextView descView;
+        Button buttonDelete;
+        Button buttonRefill;
+        EditText number;
+        Button buttonPlus;
+        Button buttonMinus;
 
-        ItemViewHolder(View itemView){
+
+        ViewHolder(View itemView){
             super(itemView);
+
+            timeCheck = itemView.findViewById(R.id.timeCheck);
+            timeText = itemView.findViewById(R.id.timeText);
+            descView = itemView.findViewById(R.id.descView);
+            buttonDelete = itemView.findViewById(R.id.buttonDelete);
+            buttonRefill = itemView.findViewById(R.id.buttonRefill);
+            number = itemView.findViewById(R.id.editText);
+            buttonPlus = itemView.findViewById(R.id.buttonPlus);
+            buttonMinus = itemView.findViewById(R.id.buttonMinus);
+
         }
     }
 
-    List<MedObj>medItemListing;
+
     MedicationAdapter(List<MedObj> medItemListing)
     {
         this.medItemListing = medItemListing;
@@ -41,16 +63,16 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.I
     }
 
     @Override
-    public ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)
     {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate( R.layout.card_layout_med, viewGroup, false);
-        ItemViewHolder ivh = new ItemViewHolder(v);
+        ViewHolder ivh = new ViewHolder(v);
 
         return ivh;
     }
 
     @Override
-    public void onBindViewHolder(ItemViewHolder itemViewHolder, int i)
+    public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
         // Set resources here
 

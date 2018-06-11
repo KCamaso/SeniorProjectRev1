@@ -49,7 +49,7 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/dateView"
+                android:id="@+id/descView"
                 android:layout_width="wrap_content"
                 android:layout_height="15dp"
                 android:layout_marginStart="8dp"
@@ -59,7 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/timeText" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/buttonDelete"
                 style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/buttonRefill"
                 style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,14 +91,14 @@
                 android:ems="10"
                 android:inputType="number"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button"
+                app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/timeText"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.325" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/buttonPlus"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -110,16 +110,16 @@
                 app:layout_constraintStart_toEndOf="@+id/timeCheck" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/buttonMinus"
                 style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 android:text="-"
-                app:layout_constraintBottom_toBottomOf="@+id/button4"
-                app:layout_constraintStart_toEndOf="@+id/button4"
-                app:layout_constraintTop_toTopOf="@+id/button4"
+                app:layout_constraintBottom_toBottomOf="@+id/buttonPlus"
+                app:layout_constraintStart_toEndOf="@+id/buttonPlus"
+                app:layout_constraintTop_toTopOf="@+id/buttonPlus"
                 app:layout_constraintVertical_bias="1.0" />
 
         </android.support.constraint.ConstraintLayout>
