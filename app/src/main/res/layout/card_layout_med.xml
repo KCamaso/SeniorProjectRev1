@@ -6,13 +6,16 @@
     android:layout_height="match_parent"
     android:visibility="visible">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.MaterialComponents.CardView"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="149dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:minHeight="200dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -99,7 +102,6 @@
 
             <Button
                 android:id="@+id/buttonPlus"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -111,7 +113,7 @@
 
             <Button
                 android:id="@+id/buttonMinus"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -124,6 +126,6 @@
 
         </android.support.constraint.ConstraintLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </android.support.v7.widget.CardView>
 
 </android.support.constraint.ConstraintLayout>
