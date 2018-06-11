@@ -1,11 +1,13 @@
 package edu.wit.karen.seniorprojectrev1;
 
 
+import android.content.res.ColorStateList;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,12 +82,66 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i)
+    public void onBindViewHolder(final ViewHolder viewHolder, int i)
     {
+
         for(int n = 0; n < i; i++)
         {
+            AlarmObj alarm = mAlarms.get(i);
+            boolean active = alarm.isActive();
+
+            if(mAlarms.get(i).isWindow() == false)
+            {
+                int fromHour = alarm.getFrom().getHour();
+                int fromMinute = alarm.getFrom().getMinute();
+
+                boolean[] week = alarm.getDayOfWeek();
+                List<MedObj> meds = alarm.getMedications();
+
+                viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
+                weekCheck(viewHolder, week);
+                medList(viewHolder, meds);
+                viewHolder.alarmDate.setVisibility(View.INVISIBLE);
+
+
+            }
+            else
+            {
+                int fromHour = mAlarms.get(i).getFrom().getHour();
+                int fromMinute = mAlarms.get(i).getFrom().getMinute();
+                int toHour = mAlarms.get(i).getTo().getHour();
+                int toMinute = mAlarms.get(i).getTo().getHour();
+
+                boolean[] week = alarm.getDayOfWeek();
+                List<MedObj> meds = alarm.getMedications();
+
+                viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
+                viewHolder.alarmDate.setText(toHour + ":" + toMinute);
+                weekCheck(viewHolder, week);
+                medList(viewHolder, meds);
+
+            }
+            if(active)
+            {
+                viewHolder.activeSwitch.setChecked(active);
+                // viewHolder.statusImage.setImageTintList("#F3F3F3");
+            }
+
 
         }
+
+    }
+
+    public void weekCheck(ViewHolder viewHolder, boolean[] days)
+    {
+        for(int i = 0; i < 7; i++)
+        {
+                viewHolder.checkBoxes[i].setChecked( days[i] );
+        }
+    }
+
+    public void medList(ViewHolder viewHolder, List<MedObj> meds)
+    {
 
     }
 

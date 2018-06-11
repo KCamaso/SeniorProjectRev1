@@ -12,6 +12,9 @@ public class AlarmObj {
     private List<MedObj> medications;
 
 
+
+/* GETTERS, SETTERS, AND  CONSTRUCTORS BELOW */
+
     public Time getFrom() {
         return from;
     }
@@ -27,6 +30,7 @@ public class AlarmObj {
     public void setTo(Time to) {
         this.to = to;
     }
+
 
     public boolean isWindow() {
         return isWindow;
@@ -73,5 +77,21 @@ public class AlarmObj {
     public class Time {
         private int hour;
         private int minute;
+
+        public int getMinute() {
+            return minute;
+        }
+
+        public void setMinute(int minute) {
+            this.minute = minute;
+        }
+
+        public int getHour() {
+            return hour;
+        }
+
+        public void setHour(int hour) {
+            this.hour = hour;
+        }
     }
 }

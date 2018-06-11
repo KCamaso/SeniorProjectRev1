@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/medList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible">
@@ -14,12 +15,12 @@
         android:layout_marginStart="8dp"
         android:animateLayoutChanges="true"
         android:minHeight="200dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01">
+        app:layout_constraintVertical_bias="0.008">
 
         <!-- Card contents. -->
 
@@ -35,9 +36,6 @@
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -46,11 +44,12 @@
                         android:id="@+id/timeCheck"
                         android:layout_width="20dp"
                         android:layout_height="match_parent"
-                        android:layout_marginEnd="344dp"
+                        android:layout_marginEnd="356dp"
+                        android:layout_marginStart="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:srcCompat="@color/colorAccent"
-                        tools:layout_editor_absoluteY="16dp" />
+                        tools:layout_editor_absoluteY="0dp" />
 
                     <Switch
                         android:id="@+id/alarmSwitch"
@@ -204,7 +203,7 @@
                             android:id="@+id/checkBoxSu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                         <CheckBox
                             android:id="@+id/checkBoxM"
@@ -216,22 +215,22 @@
                             android:id="@+id/checkBoxTu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center"/>
+                            android:gravity="center" />
 
                         <CheckBox
                             android:id="@+id/checkBoxW"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/checkBoxTh"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/checkBoxF"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                         <CheckBox
                             android:id="@+id/checkBoxSa"
@@ -244,6 +243,7 @@
 
                 <Button
                     android:id="@+id/alarmEditButton"
+                    style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
