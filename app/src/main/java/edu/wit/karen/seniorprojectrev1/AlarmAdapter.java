@@ -125,12 +125,8 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             if(active)
             {
                 viewHolder.activeSwitch.setChecked(active);
-                // viewHolder.statusImage.setImageTintList("#F3F3F3");
+                viewHolder.statusImage.setImageResource(R.color.colorAccent);
             }
-
-            viewHolder.weekLayout.setVisibility(GONE);
-
-
 
     }
 

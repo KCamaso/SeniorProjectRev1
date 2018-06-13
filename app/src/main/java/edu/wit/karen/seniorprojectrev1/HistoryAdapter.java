@@ -69,10 +69,9 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
-        for(int n = 0; n < i; i++)
-        {
+        HistoryObj history = mHistory.get(i);
 
-        }
+       // itemViewHolder.
     }
 
     @Override
