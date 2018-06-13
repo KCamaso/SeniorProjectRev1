@@ -4,10 +4,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -90,26 +95,27 @@ public class AlarmFrag extends Fragment {
             });
         }
 
-        // FIREBASE CODE
-        /*
-        Map<String, Object> data = new HashMap<>();
-        data.put("Hello", "Alarms!");
-        data.put("This is", "a placeholder!");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("alarms")
-                .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d("DATABASE", "DocumentSnapshot written with ID: " + documentReference.getId());
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("DATABASE", "Error adding document", e);
-                    }
-                });
-                 */
+       MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
+        ArrayList<MedObj> list1 = new ArrayList<>();
+        list1.add(med1);
+        boolean[] doW1 = {true,false,true,false,true,false,true};
+       AlarmObj alarm1 = new AlarmObj(4,20,16,46,true,true,doW1,list1);
+        AlarmObj alarm2 = new AlarmObj(15,20,15,46,true,true,doW1,list1);
+
+        ArrayList<AlarmObj> list2 = new ArrayList<>();
+        list2.add(alarm1);
+        list2.add(alarm2);
+
+        RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+        recycList.setLayoutManager(mLayoutManager);
+
+        RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
+
+        recycList.setAdapter(mAdapter);
+
+
 
         return view;
 

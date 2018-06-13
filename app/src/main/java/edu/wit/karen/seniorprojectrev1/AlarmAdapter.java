@@ -18,6 +18,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+
 /**
  * Created by camasok on 2/16/2018.
  */
@@ -48,8 +50,9 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             list = (ListView) itemView.findViewById(R.id.alarm_dynamic);
             activeSwitch = (Switch) itemView.findViewById(R.id.alarmSwitch);
             moreButt = (Button) itemView.findViewById(R.id.alarmMoreButton);
-            editButt = (Button) itemView.findViewById(R.id.weekLayout);
+            editButt = (Button) itemView.findViewById(R.id.alarmEditButton);
             weekLayout = (ConstraintLayout) itemView.findViewById(R.id.weekLayout);
+            checkBoxes = new CheckBox[] {itemView.findViewById(R.id.checkBoxSu),itemView.findViewById(R.id.checkBoxM),itemView.findViewById(R.id.checkBoxTu),itemView.findViewById(R.id.checkBoxW),itemView.findViewById(R.id.checkBoxTh),itemView.findViewById(R.id.checkBoxF),itemView.findViewById(R.id.checkBoxSa)};
 
 
         }
@@ -85,15 +88,13 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     public void onBindViewHolder(final ViewHolder viewHolder, int i)
     {
 
-        for(int n = 0; n < i; i++)
-        {
             AlarmObj alarm = mAlarms.get(i);
             boolean active = alarm.isActive();
 
             if(mAlarms.get(i).isWindow() == false)
             {
-                int fromHour = alarm.getFrom().getHour();
-                int fromMinute = alarm.getFrom().getMinute();
+                int fromHour = alarm.getFromHour();
+                int fromMinute = alarm.getFromMinute();
 
                 boolean[] week = alarm.getDayOfWeek();
                 List<MedObj> meds = alarm.getMedications();
@@ -107,10 +108,10 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             }
             else
             {
-                int fromHour = mAlarms.get(i).getFrom().getHour();
-                int fromMinute = mAlarms.get(i).getFrom().getMinute();
-                int toHour = mAlarms.get(i).getTo().getHour();
-                int toMinute = mAlarms.get(i).getTo().getHour();
+                int fromHour = mAlarms.get(i).getFromHour();
+                int fromMinute = mAlarms.get(i).getFromMinute();
+                int toHour = mAlarms.get(i).getToHour();
+                int toMinute = mAlarms.get(i).getToHour();
 
                 boolean[] week = alarm.getDayOfWeek();
                 List<MedObj> meds = alarm.getMedications();
@@ -127,14 +128,15 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 // viewHolder.statusImage.setImageTintList("#F3F3F3");
             }
 
+            viewHolder.weekLayout.setVisibility(GONE);
 
-        }
+
 
     }
 
     public void weekCheck(ViewHolder viewHolder, boolean[] days)
     {
-        for(int i = 0; i < 7; i++)
+        for(int i = 0; i < 6; i++)
         {
                 viewHolder.checkBoxes[i].setChecked( days[i] );
         }

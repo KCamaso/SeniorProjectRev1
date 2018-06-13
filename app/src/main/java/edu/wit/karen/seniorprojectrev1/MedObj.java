@@ -56,7 +56,7 @@ public class MedObj {
         this.info = info;
     }
 
-    public void MedObj(String name, int ammnt, boolean notify, String info)
+    public MedObj(String name, int ammnt, boolean notify, String info)
     {
         this.name = name;
         this.ammnt = ammnt;
@@ -68,7 +68,7 @@ public class MedObj {
 
 
     }
-    public void MedObj(String name, boolean infinite, boolean notify, String info)
+    public MedObj(String name, boolean infinite, boolean notify, String info)
     {
         this.name = name;
         this.infinite = infinite;

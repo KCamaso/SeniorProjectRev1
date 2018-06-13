@@ -4,32 +4,54 @@ import java.util.List;
 
 public class AlarmObj {
 
-    private Time from;
-    private Time to;
+    private int fromHour;
+    private int toHour;
+    private int fromMinute;
+    private int toMinute;
     private boolean isWindow;
     private boolean active;
+
+
+
+    /* GETTERS, SETTERS, AND  CONSTRUCTORS BELOW */
+
+
+
+
+    public int getFromHour() {
+        return fromHour;
+    }
+
+    public void setFromHour(int fromHour) {
+        this.fromHour = fromHour;
+    }
+
+    public int getToHour() {
+        return toHour;
+    }
+
+    public void setToHour(int toHour) {
+        this.toHour = toHour;
+    }
+
+    public int getFromMinute() {
+        return fromMinute;
+    }
+
+    public void setFromMinute(int fromMinute) {
+        this.fromMinute = fromMinute;
+    }
+
+    public int getToMinute() {
+        return toMinute;
+    }
+
+    public void setToMinute(int toMinute) {
+        this.toMinute = toMinute;
+    }
+
     private boolean[] dayOfWeek;
     private List<MedObj> medications;
-
-
-
-/* GETTERS, SETTERS, AND  CONSTRUCTORS BELOW */
-
-    public Time getFrom() {
-        return from;
-    }
-
-    public void setFrom(Time from) {
-        this.from = from;
-    }
-
-    public Time getTo() {
-        return to;
-    }
-
-    public void setTo(Time to) {
-        this.to = to;
-    }
 
 
     public boolean isWindow() {
@@ -64,34 +86,17 @@ public class AlarmObj {
         this.medications = medications;
     }
 
-    public void AlarmObj(Time from, Time to,boolean isWindow,boolean active, boolean[] dayOfWeek, List<MedObj> medications)
+    public AlarmObj(int fromHour, int fromMinute, int toHour, int toMinute,boolean isWindow,boolean active, boolean[] dayOfWeek, List<MedObj> medications)
     {
-        this.from = from;
-        this.to = to;
+        this.fromHour = fromHour;
+        this.toHour = toHour;
+        this.fromMinute = fromMinute;
+        this.toMinute = toMinute;
         this.isWindow = isWindow;
         this.active = active;
         this.dayOfWeek = dayOfWeek;
         this.medications = medications;
     }
 
-    public class Time {
-        private int hour;
-        private int minute;
 
-        public int getMinute() {
-            return minute;
-        }
-
-        public void setMinute(int minute) {
-            this.minute = minute;
-        }
-
-        public int getHour() {
-            return hour;
-        }
-
-        public void setHour(int hour) {
-            this.hour = hour;
-        }
-    }
 }

@@ -7,13 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by camasok on 2/16/2018.
@@ -25,7 +22,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
     public static class ViewHolder extends  RecyclerView.ViewHolder
     {
         ImageView timeCheck;
-        TextView timeText;
+        TextView nameText;
         TextView descView;
         Button buttonDelete;
         Button buttonRefill;
@@ -38,7 +35,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             super(itemView);
 
             timeCheck = itemView.findViewById(R.id.timeCheck);
-            timeText = itemView.findViewById(R.id.timeText);
+            nameText = itemView.findViewById(R.id.nameText);
             descView = itemView.findViewById(R.id.descView);
             buttonDelete = itemView.findViewById(R.id.buttonDelete);
             buttonRefill = itemView.findViewById(R.id.buttonRefill);
@@ -75,6 +72,12 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
     public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
         // Set resources here
+
+        MedObj med = medItemListing.get(i);
+
+        itemViewHolder.number.setText( med.getAmmnt());
+        itemViewHolder.descView.setText(med.getInfo());
+        itemViewHolder.nameText.setText(med.getName());
 
     }
 

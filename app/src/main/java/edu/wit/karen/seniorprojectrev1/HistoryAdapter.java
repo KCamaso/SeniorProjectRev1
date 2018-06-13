@@ -36,7 +36,7 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
          super(itemView);
 
          timeCheck = (ImageView) itemView.findViewById(R.id.timeCheck);
-         timeText = (TextView) itemView.findViewById(R.id.timeText);
+         timeText = (TextView) itemView.findViewById(R.id.nameText);
          missView = (TextView) itemView.findViewById(R.id.missView);
          dateView = (TextView) itemView.findViewById(R.id.dateView);
          buttonDelete = (Button) itemView.findViewById(R.id.buttonDelete);
