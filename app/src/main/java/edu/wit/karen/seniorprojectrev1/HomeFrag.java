@@ -70,7 +70,7 @@ public class HomeFrag extends Fragment {
         }
 
 
-        return inflater.inflate(R.layout.card_layout_alarm, container, false);
+        return inflater.inflate(R.layout.home_main, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

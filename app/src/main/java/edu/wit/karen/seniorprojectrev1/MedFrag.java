@@ -5,10 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 /**
@@ -74,8 +78,8 @@ public class MedFrag extends Fragment {
             container.clearDisappearingChildren();
         }
 
-        View view = inflater.inflate(R.layout.alarm_main, container, false);
-        fab = view.findViewById(R.id.fab_alarm);
+        View view = inflater.inflate(R.layout.med_main, container, false);
+        fab = view.findViewById(R.id.fab_med);
 
         if (fab != null)
         {
@@ -88,6 +92,18 @@ public class MedFrag extends Fragment {
                 }
             });
         }
+
+        MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
+        ArrayList<MedObj> list1 = new ArrayList<>();
+        RecyclerView recycList = view.findViewById(R.id.medRecycler);
+        list1.add(med1);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+        recycList.setLayoutManager(mLayoutManager);
+
+        RecyclerView.Adapter mAdapter = new MedicationAdapter(list1);
+
+        recycList.setAdapter(mAdapter);
 
 
         return view;

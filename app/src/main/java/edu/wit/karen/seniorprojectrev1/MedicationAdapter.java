@@ -39,7 +39,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             descView = itemView.findViewById(R.id.descView);
             buttonDelete = itemView.findViewById(R.id.buttonDelete);
             buttonRefill = itemView.findViewById(R.id.buttonRefill);
-            number = itemView.findViewById(R.id.editText);
+            number = itemView.findViewById(R.id.numberText);
             buttonPlus = itemView.findViewById(R.id.buttonPlus);
             buttonMinus = itemView.findViewById(R.id.buttonMinus);
 
@@ -75,7 +75,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
 
         MedObj med = medItemListing.get(i);
 
-        itemViewHolder.number.setText( med.getAmmnt());
+        itemViewHolder.number.setText( Integer.toString(med.getAmmnt()));
         itemViewHolder.descView.setText(med.getInfo());
         itemViewHolder.nameText.setText(med.getName());
 
