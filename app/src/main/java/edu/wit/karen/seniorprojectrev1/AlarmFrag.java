@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.List;
  * Use the {@link AlarmFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlarmFrag extends Fragment {
+public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueListener */ {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,6 +37,7 @@ public class AlarmFrag extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     FloatingActionButton fab;
+    ArrayList<AlarmObj> list2 = new ArrayList<>();
 
     public AlarmFrag() {
         // Required empty public constructor
@@ -91,6 +93,7 @@ public class AlarmFrag extends Fragment {
                 public void onClick(View view)
                 {
                     Toast.makeText(getContext(), "Action for adding alarm goes here!", Toast.LENGTH_SHORT).show();
+                    openAlarmDia();
                 }
             });
         }
@@ -102,7 +105,7 @@ public class AlarmFrag extends Fragment {
        AlarmObj alarm1 = new AlarmObj(4,20,16,46,true,true,doW1,list1);
         AlarmObj alarm2 = new AlarmObj(15,20,15,46,true,true,doW1,list1);
 
-        ArrayList<AlarmObj> list2 = new ArrayList<>();
+
         list2.add(alarm1);
         list2.add(alarm2);
 
@@ -121,6 +124,12 @@ public class AlarmFrag extends Fragment {
 
     }
 
+    public void openAlarmDia()
+    {
+        TimeDialog timeDialog = new TimeDialog();
+        timeDialog.show(getChildFragmentManager(), "Time Dialogue");
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -133,6 +142,16 @@ public class AlarmFrag extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    /*
+    @Override
+    public void applyInfo(int hour, int minute, boolean[] boxes) {
+        MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
+        ArrayList<MedObj> list1 = new ArrayList<>();
+        AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,boxes,list1);
+        list2.add(alarm1);
+
+    } */
 
     /**
      * This interface must be implemented by activities that contain this

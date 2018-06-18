@@ -35,7 +35,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             super(itemView);
 
             timeCheck = itemView.findViewById(R.id.timeCheck);
-            nameText = itemView.findViewById(R.id.nameText);
+            nameText = itemView.findViewById(R.id.timeText);
             descView = itemView.findViewById(R.id.descView);
             buttonDelete = itemView.findViewById(R.id.buttonDelete);
             buttonRefill = itemView.findViewById(R.id.buttonRefill);

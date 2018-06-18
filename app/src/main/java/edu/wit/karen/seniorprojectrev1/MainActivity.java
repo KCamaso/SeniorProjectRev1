@@ -156,6 +156,13 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(null);
             transaction.commit();
 
+        } else if (id == R.id.nav_history) {
+
+            newFragment = new HistoryFrag();
+            transaction.replace(R.id.placeholder_fragment, newFragment);
+            transaction.addToBackStack(null);
+           transaction.commit();
+
 
         } else if (id == R.id.nav_settings) {
 

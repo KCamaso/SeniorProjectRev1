@@ -16,6 +16,10 @@
             android:id="@+id/nav_meds"
             android:icon="@drawable/ic_menu_medication"
             android:title="Medication" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_menu_history"
+            android:title="History"/>
     </group>
 
     <item android:title="Other">

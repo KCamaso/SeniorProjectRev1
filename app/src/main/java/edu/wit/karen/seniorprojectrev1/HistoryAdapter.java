@@ -1,6 +1,7 @@
 package edu.wit.karen.seniorprojectrev1;
 
 
+import android.icu.util.Calendar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
          super(itemView);
 
          timeCheck = (ImageView) itemView.findViewById(R.id.timeCheck);
-         timeText = (TextView) itemView.findViewById(R.id.nameText);
+         timeText = (TextView) itemView.findViewById(R.id.timeText);
          missView = (TextView) itemView.findViewById(R.id.missView);
          dateView = (TextView) itemView.findViewById(R.id.dateView);
          buttonDelete = (Button) itemView.findViewById(R.id.buttonDelete);
@@ -69,9 +71,23 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
-        HistoryObj history = mHistory.get(i);
+        HistoryObj hHistory = mHistory.get(i);
 
-       // itemViewHolder.
+        if(hHistory.getDismissed().toString().equals("true"))
+        {
+            itemViewHolder.timeText.setText("Taken");
+        }
+        else
+        {
+            itemViewHolder.timeText.setText("Missed");
+        }
+
+
+       itemViewHolder.missView.setText( hHistory.getMissedMeds().toString());
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
+        itemViewHolder.dateView.setText(format.format(calendar.getTime()));
     }
 
     @Override

@@ -102,7 +102,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 weekCheck(viewHolder, week);
                 medList(viewHolder, meds);
-                viewHolder.alarmDate.setVisibility(View.INVISIBLE);
+                viewHolder.alarmDate.setVisibility(View.VISIBLE);
 
 
             }

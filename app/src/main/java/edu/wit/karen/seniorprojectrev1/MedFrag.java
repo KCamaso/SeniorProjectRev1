@@ -89,6 +89,7 @@ public class MedFrag extends Fragment {
                 public void onClick(View view)
                 {
                     Toast.makeText(getContext(), "Action for adding medication goes here!", Toast.LENGTH_SHORT).show();
+                    openMedDia();
                 }
             });
         }
@@ -114,6 +115,12 @@ public class MedFrag extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void openMedDia()
+    {
+        MedicineDialog medDialog = new MedicineDialog();
+        medDialog.show(getChildFragmentManager(), "Medicine Dialogue");
     }
 
     @Override

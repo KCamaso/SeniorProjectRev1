@@ -10,7 +10,8 @@ public class AlarmObj {
     private int toMinute;
     private boolean isWindow;
     private boolean active;
-
+    private boolean[] dayOfWeek;
+    private List<MedObj> medications;
 
 
     /* GETTERS, SETTERS, AND  CONSTRUCTORS BELOW */
@@ -49,9 +50,6 @@ public class AlarmObj {
     public void setToMinute(int toMinute) {
         this.toMinute = toMinute;
     }
-
-    private boolean[] dayOfWeek;
-    private List<MedObj> medications;
 
 
     public boolean isWindow() {
