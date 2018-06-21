@@ -79,6 +79,16 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
         itemViewHolder.descView.setText(med.getInfo());
         itemViewHolder.nameText.setText(med.getName());
 
+
+
+    }
+
+    @Override public void onClick(ViewHolder v)
+    {
+        switch(v.getItemId()){
+            case R.id.buttonPlus:
+
+        }
     }
 
     @Override
