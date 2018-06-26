@@ -83,12 +83,9 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
 
     }
 
-    @Override public void onClick(ViewHolder v)
+    public void onClick(ViewHolder v)
     {
-        switch(v.getItemId()){
-            case R.id.buttonPlus:
 
-        }
     }
 
     @Override
