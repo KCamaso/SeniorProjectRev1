@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,7 +122,6 @@ public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueLis
         RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
 
         recycList.setAdapter(mAdapter);
-
 
 
         return view;

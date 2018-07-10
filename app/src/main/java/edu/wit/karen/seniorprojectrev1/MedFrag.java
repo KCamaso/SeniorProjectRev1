@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
+
 import java.util.ArrayList;
 
 
@@ -105,6 +108,7 @@ public class MedFrag extends Fragment {
         RecyclerView.Adapter mAdapter = new MedicationAdapter(list1);
 
         recycList.setAdapter(mAdapter);
+
 
 
         return view;

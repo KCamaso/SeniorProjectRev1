@@ -20,4 +20,6 @@
     <string name="title_activity_authentication">AuthenticationActivity</string>
     <string name="infDoseBox">Unlimited Dosage?</string>
     <string name="medNotify">Notify when prescription is low?</string>
+    <string name="title_activity_authenticator">AuthenticatorActivity</string>
+    <string name="welcomeTest">Welcome! Logging in...</string>
 </resources>

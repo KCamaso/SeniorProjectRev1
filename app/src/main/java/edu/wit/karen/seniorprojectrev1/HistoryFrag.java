@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import java.util.ArrayList;
 
 
@@ -95,6 +99,7 @@ public class HistoryFrag extends Fragment {
         RecyclerView.Adapter mAdapter = new HistoryAdapter(list1);
 
         recycList.setAdapter(mAdapter);
+
         return view;
     }
 

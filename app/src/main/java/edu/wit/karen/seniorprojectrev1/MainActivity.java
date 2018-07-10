@@ -1,6 +1,7 @@
 package edu.wit.karen.seniorprojectrev1;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,14 +19,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.auth.core.IdentityManager;
+import com.amazonaws.mobile.auth.core.SignInStateChangeListener;
+import com.amazonaws.mobile.auth.ui.SignInUI;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.client.AWSStartupHandler;
 import com.amazonaws.mobile.client.AWSStartupResult;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static PinpointManager pinpointManager;
 
 
     @Override
@@ -33,16 +44,35 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-      /*  AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
             @Override
             public void onComplete(AWSStartupResult awsStartupResult) {
                 Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
             }
-        }).execute(); */
+        }).execute();
+
+        AWSConfiguration awsConfiguration = new AWSConfiguration(this);
+
+        if (IdentityManager.getDefaultIdentityManager() == null) {
+            final IdentityManager identityManager = new IdentityManager(getApplicationContext(), awsConfiguration);
+            IdentityManager.setDefaultIdentityManager(identityManager);
+        }
+
+        try {
+            final PinpointConfiguration config =
+                    new PinpointConfiguration(this,
+                            IdentityManager.getDefaultIdentityManager().getCredentialsProvider(),
+                            awsConfiguration);
+            MainActivity.pinpointManager = new PinpointManager(config);
+        } catch (final AmazonClientException ex) {
+            Log.e("MyMainActivity", "Unable to initialize PinpointManager. " + ex.getMessage(), ex);
+        }
+
+        Log.e("MyMainActivity", "PINPOINT MANAGER INITIALIZED; YOU DID IT FAM");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -150,12 +180,32 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_sign_out) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AWSMobileClient.getInstance().initialize(this).execute();
 
             // Add the buttons
             builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     // User clicked OK button
                     IdentityManager.getDefaultIdentityManager().signOut();
+                    // Sign-in listener
+
+
+                    IdentityManager.getDefaultIdentityManager().addSignInStateChangeListener(new SignInStateChangeListener() {
+                        @Override
+                        public void onUserSignedIn() {
+                            Log.d("TimeRx", "User Signed In");
+                        }
+
+                        // Sign-out listener
+                        @Override
+                        public void onUserSignedOut() {
+
+                            Log.d("TimeRx", "User Signed Out");
+                            showSignIn();
+                        }
+                    });
+
+                    showSignIn();
 
                 }
             });
@@ -181,6 +231,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void showSignIn() {
+
+        Log.d("TimeRx", "showSignIn");
+
+        SignInUI signin = (SignInUI) AWSMobileClient.getInstance().getClient(this, SignInUI.class);
+        signin.login(this, AuthenticatorActivity.class).execute();
+    }
 
 }
 
