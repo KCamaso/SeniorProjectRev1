@@ -2,6 +2,7 @@ package edu.wit.karen.seniorprojectrev1;
 
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -126,6 +127,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             {
                 viewHolder.activeSwitch.setChecked(active);
                 viewHolder.statusImage.setImageResource(R.color.colorAccent);
+
             }
 
     }

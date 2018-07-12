@@ -29,7 +29,7 @@ import java.util.List;
  * Use the {@link AlarmFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueListener */ {
+public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -98,7 +98,9 @@ public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueLis
                 public void onClick(View view)
                 {
                     Toast.makeText(getContext(), "Action for adding alarm goes here!", Toast.LENGTH_SHORT).show();
-                    openAlarmDia();
+
+                    TimeDialog timeDialog = new TimeDialog();
+                    timeDialog.show(getFragmentManager(), "Time Dialogue");
                 }
             });
         }
@@ -108,7 +110,7 @@ public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueLis
         list1.add(med1);
         boolean[] doW1 = {true,false,true,false,true,false,true};
        AlarmObj alarm1 = new AlarmObj(4,20,16,46,true,true,doW1,list1);
-        AlarmObj alarm2 = new AlarmObj(15,20,15,46,true,true,doW1,list1);
+        AlarmObj alarm2 = new AlarmObj(15,20,15,46,true,false,doW1,list1);
 
 
         list2.add(alarm1);
@@ -128,11 +130,7 @@ public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueLis
 
     }
 
-    public void openAlarmDia()
-    {
-        TimeDialog timeDialog = new TimeDialog();
-        timeDialog.show(getChildFragmentManager(), "Time Dialogue");
-    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -147,15 +145,16 @@ public class AlarmFrag extends Fragment /* implements TimeDialog.TimeDialogueLis
         mListener = null;
     }
 
-    /*
+
     @Override
     public void applyInfo(int hour, int minute, boolean[] boxes) {
         MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
         ArrayList<MedObj> list1 = new ArrayList<>();
-        AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,boxes,list1);
+        boolean[] doW1 = {true,false,true,false,true,false,true};
+        AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,doW1,list1);
         list2.add(alarm1);
 
-    } */
+    }
 
     /**
      * This interface must be implemented by activities that contain this
