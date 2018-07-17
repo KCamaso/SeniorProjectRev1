@@ -105,6 +105,8 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
             });
         }
 
+        /* TEST DISPLAY CODE */
+            /*
        MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
         ArrayList<MedObj> list1 = new ArrayList<>();
         list1.add(med1);
@@ -124,6 +126,7 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
 
         recycList.setAdapter(mAdapter);
+        */
 
 
         return view;

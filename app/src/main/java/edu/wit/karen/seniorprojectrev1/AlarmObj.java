@@ -11,7 +11,7 @@ public class AlarmObj {
     private boolean isWindow;
     private boolean active;
     private boolean[] dayOfWeek;
-    private List<MedObj> medications;
+    private List<String> medications;
 
 
     /* GETTERS, SETTERS, AND  CONSTRUCTORS BELOW */
@@ -76,15 +76,15 @@ public class AlarmObj {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public List<MedObj> getMedications() {
+    public List<String> getMedications() {
         return medications;
     }
 
-    public void setMedications(List<MedObj> medications) {
+    public void setMedications(List<String> medications) {
         this.medications = medications;
     }
 
-    public AlarmObj(int fromHour, int fromMinute, int toHour, int toMinute,boolean isWindow,boolean active, boolean[] dayOfWeek, List<MedObj> medications)
+    public AlarmObj(int fromHour, int fromMinute, int toHour, int toMinute,boolean isWindow,boolean active, boolean[] dayOfWeek, List<String> medications)
     {
         this.fromHour = fromHour;
         this.toHour = toHour;

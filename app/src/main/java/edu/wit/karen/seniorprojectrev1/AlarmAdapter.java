@@ -1,6 +1,7 @@
 package edu.wit.karen.seniorprojectrev1;
 
 
+import android.animation.ObjectAnimator;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
@@ -55,6 +56,23 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             weekLayout = (ConstraintLayout) itemView.findViewById(R.id.weekLayout);
             checkBoxes = new CheckBox[] {itemView.findViewById(R.id.checkBoxSu),itemView.findViewById(R.id.checkBoxM),itemView.findViewById(R.id.checkBoxTu),itemView.findViewById(R.id.checkBoxW),itemView.findViewById(R.id.checkBoxTh),itemView.findViewById(R.id.checkBoxF),itemView.findViewById(R.id.checkBoxSa)};
 
+            moreButt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ObjectAnimator anime1 = ObjectAnimator.ofInt(weekLayout, "maxHeight", weekLayout.getMaxHeight());
+                    if( weekLayout.getVisibility() == View.GONE)
+                    {
+                        weekLayout.setVisibility(View.VISIBLE);
+                    }
+                    else
+                    {
+                        weekLayout.setVisibility(View.GONE);
+                    }
+                    anime1.setDuration(200).start();
+                }
+
+            });
+
 
         }
 
@@ -98,7 +116,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int fromMinute = alarm.getFromMinute();
 
                 boolean[] week = alarm.getDayOfWeek();
-                List<MedObj> meds = alarm.getMedications();
+                List<String> meds = alarm.getMedications();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 weekCheck(viewHolder, week);
@@ -115,7 +133,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int toMinute = mAlarms.get(i).getToHour();
 
                 boolean[] week = alarm.getDayOfWeek();
-                List<MedObj> meds = alarm.getMedications();
+                List<String> meds = alarm.getMedications();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 viewHolder.alarmDate.setText(toHour + ":" + toMinute);
@@ -140,7 +158,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
         }
     }
 
-    public void medList(ViewHolder viewHolder, List<MedObj> meds)
+    public void medList(ViewHolder viewHolder, List<String> meds)
     {
 
     }

@@ -97,6 +97,8 @@ public class MedFrag extends Fragment {
             });
         }
 
+
+        /*
         MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
         ArrayList<MedObj> list1 = new ArrayList<>();
         RecyclerView recycList = view.findViewById(R.id.medRecycler);
@@ -108,7 +110,7 @@ public class MedFrag extends Fragment {
         RecyclerView.Adapter mAdapter = new MedicationAdapter(list1);
 
         recycList.setAdapter(mAdapter);
-
+*/
 
 
         return view;

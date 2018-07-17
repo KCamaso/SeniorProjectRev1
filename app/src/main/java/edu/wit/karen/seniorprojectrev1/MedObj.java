@@ -6,6 +6,8 @@ public class MedObj {
 
     private String name;
     private int ammnt;
+    private int maxNum;
+    private int notifyNum;
     private boolean infinite;
     private boolean notify;
     private String info;
@@ -54,6 +56,26 @@ public class MedObj {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public int getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(int maxNum) {
+        this.maxNum = maxNum;
+    }
+
+    public int getNotifyNum() {
+        return notifyNum;
+    }
+
+    public void setNotifyNum(int notifyNum) {
+        this.notifyNum = notifyNum;
+    }
+
+    public boolean isInfinite() {
+        return infinite;
     }
 
     public MedObj(String name, int ammnt, boolean notify, String info)
