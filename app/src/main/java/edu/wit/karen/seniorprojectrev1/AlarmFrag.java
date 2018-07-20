@@ -1,20 +1,30 @@
 package edu.wit.karen.seniorprojectrev1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
+import com.amazonaws.auth.AWSCognitoIdentityProvider;
 import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSIdentityProvider;
+import com.amazonaws.mobile.auth.core.IdentityHandler;
+import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.cognitoidentityprovider.tokens.CognitoIdToken;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
@@ -24,6 +34,8 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Timer;
 
 
 /**
@@ -39,6 +51,9 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String USER_ID = MainActivity.userId;
+
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -48,6 +63,7 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
 
     FloatingActionButton fab;
     ArrayList<AlarmObj> list2 = new ArrayList<>();
+
 
     public AlarmFrag() {
         // Required empty public constructor
@@ -95,20 +111,73 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         View view = inflater.inflate(R.layout.alarm_main, container, false);
         fab = view.findViewById(R.id.fab_alarm);
 
-        if (fab != null)
+        Log.e("MyMainApplication", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
+
+
+        if(fab != null)
         {
             fab.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)
                 {
+                    final TimerDO timerItem = new TimerDO();
+
+                    timerItem.setUserId(USER_ID);
+
+
+
+                    int max = 10;
+                    int min = 1;
+                    int range = max - min + 1;
+
+                    // generate random numbers within 1 to 10
+
+                        final int rand = (int)(Math.random() * range) + min;
+                    int rand2 = (int)(Math.random() * range) + min;
+
+                        timerItem.setFromHour((double) rand);
+                        timerItem.setToHour((double) rand2);
+
+                    new Thread((new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity.dynamoDBMapper.save(timerItem);
+                        }
+                    })).start();
+
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            TimerDO timerRead = MainActivity.dynamoDBMapper.load(TimerDO.class, USER_ID,(double) rand);
+                            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                            alertDialog.setTitle("Alert");
+                            alertDialog.setMessage("Number Returned" + timerRead.getToHour());
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+
+                        }
+                    }).start();
+
+
+                    // TIME DIALOGUE PLACEHOLDER
+                    /*
                     Toast.makeText(getContext(), "Action for adding alarm goes here!", Toast.LENGTH_SHORT).show();
 
                     TimeDialog timeDialog = new TimeDialog();
-                    timeDialog.show(getFragmentManager(), "Time Dialogue");
+                    timeDialog.show(getFragmentManager(), "Time Dialogue"); */
                 }
             });
         }
+
+
 
         /* TEST DISPLAY CODE */
             /*
@@ -161,8 +230,7 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
         ArrayList<MedObj> list1 = new ArrayList<>();
         boolean[] doW1 = {true,false,true,false,true,false,true};
-        AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,doW1,list1);
-        list2.add(alarm1);
+      //  AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,doW1,list1);// list2.add(alarm1);
 
     }
 

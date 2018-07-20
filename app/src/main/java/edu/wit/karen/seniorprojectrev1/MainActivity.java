@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobile.auth.core.IdentityHandler;
 import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.auth.core.SignInStateChangeListener;
 import com.amazonaws.mobile.auth.ui.SignInUI;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity
 
     public static PinpointManager pinpointManager;
     public  static DynamoDBMapper dynamoDBMapper;
+    public static CognitoCachingCredentialsProvider cogCredentialsProvider;
+    public static IdentityManager identityManager;
+    public static String userId;
 
 
     @Override
@@ -51,12 +55,19 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
-        AWSMobileClient.getInstance().initialize(this).execute();
+        // Initializes AWS Client
+        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
+            @Override
+            public void onComplete(AWSStartupResult awsStartupResult) {
+                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
+            }
+        }).execute();
+
 
         // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider cogCredentialsProvider = new CognitoCachingCredentialsProvider(
+        cogCredentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
-                "us-east-1:6b950731-d974-4381-bd6b-16ba1111533d", // Identity pool ID
+                "us-east-1:1be0f888-8198-4037-859e-b262fa99fb32", // Identity pool ID
                 Regions.US_EAST_1 // Region
         );
         AWSConfiguration configuration = AWSMobileClient.getInstance().getConfiguration();
@@ -65,20 +76,11 @@ public class MainActivity extends AppCompatActivity
         // Add code to instantiate a AmazonDynamoDBClient
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cogCredentialsProvider);
 
-
-
-
-        AWSMobileClient.getInstance().initialize(this, new AWSStartupHandler() {
-            @Override
-            public void onComplete(AWSStartupResult awsStartupResult) {
-                Log.d("YourMainActivity", "AWSMobileClient is instantiated and you are connected to AWS!");
-            }
-        }).execute();
-
         AWSConfiguration awsConfiguration = new AWSConfiguration(this);
 
+        // Sets up Pinpoint Manager (Analytics)
         if (IdentityManager.getDefaultIdentityManager() == null) {
-            final IdentityManager identityManager = new IdentityManager(getApplicationContext(), awsConfiguration);
+            identityManager = new IdentityManager(getApplicationContext(), awsConfiguration);
             IdentityManager.setDefaultIdentityManager(identityManager);
         }
 
@@ -99,13 +101,27 @@ public class MainActivity extends AppCompatActivity
                 .dynamoDBClient(dynamoDBClient)
                 .awsConfiguration(configuration)
                 .build();
+        IdentityManager.getDefaultIdentityManager().getUserID(new IdentityHandler() {
+            @Override
+            public void onIdentityId(String identityId) {
+                userId = identityId;
+            }
+
+            @Override
+            public void handleError(Exception exception) {
+                Log.e("MyMainActivity", exception.toString());
+            }
+        });
+
 
         Log.e("MyMainActivity", "DYNAMODB CLIENT ACTIVATED");
+        Log.e("MyMainActivity", "THE USER ID IN MAIN ACTIVITY IS FUCKIN:" + userId);
 
+
+
+        // Sets up drawer and toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -116,9 +132,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //sets up fragment in view
         Fragment newFragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
+        //Places HomeFrag
         newFragment = new HomeFrag();
         transaction.replace(R.id.placeholder_fragment, newFragment);
         transaction.addToBackStack(null);
