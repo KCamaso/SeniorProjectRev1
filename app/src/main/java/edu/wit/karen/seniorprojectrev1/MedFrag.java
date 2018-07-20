@@ -12,8 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.ArrayList;
 
@@ -31,12 +36,14 @@ public class MedFrag extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String USER_ID = MainActivity.userId;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public DynamoDBMapper dynamoDBMapper;
 
     FloatingActionButton fab;
 
@@ -82,6 +89,9 @@ public class MedFrag extends Fragment {
         }
 
         View view = inflater.inflate(R.layout.med_main, container, false);
+        //Setup DynamoDB
+        setupDynamoDB();
+
         fab = view.findViewById(R.id.fab_med);
 
         if (fab != null)
@@ -96,8 +106,6 @@ public class MedFrag extends Fragment {
                 }
             });
         }
-
-
         /*
         MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
         ArrayList<MedObj> list1 = new ArrayList<>();
@@ -110,18 +118,34 @@ public class MedFrag extends Fragment {
         RecyclerView.Adapter mAdapter = new MedicationAdapter(list1);
 
         recycList.setAdapter(mAdapter);
+
 */
-
-
         return view;
     }
 
+
+    private void setupDynamoDB()
+    {
+        // Sets up DynamoDBClient
+        AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
+        AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
+
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(config)
+                .build();
+
+        // End of DynamoDB Setup, can now make calls using dynamoDBMapper
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+
 
     public void openMedDia()
     {

@@ -10,10 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.mobile.client.AWSMobileClient;
+import com.amazonaws.mobile.config.AWSConfiguration;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+
 import java.util.ArrayList;
 
 
@@ -30,12 +36,14 @@ public class HistoryFrag extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String USER_ID = MainActivity.userId;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private DynamoDBMapper dynamoDBMapper;
 
     public HistoryFrag() {
         // Required empty public constructor
@@ -73,6 +81,7 @@ public class HistoryFrag extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.history_main, container, false);
+        setupDynamoDB();
 
 
         RecyclerView recycList = view.findViewById(R.id.historyRecycler);
@@ -101,6 +110,21 @@ public class HistoryFrag extends Fragment {
         recycList.setAdapter(mAdapter);
 
         return view;
+    }
+
+    private void setupDynamoDB()
+    {
+        // Sets up DynamoDBClient
+        AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
+        AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
+
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(config)
+                .build();
+
+        // End of DynamoDB Setup, can now make calls using dynamoDBMapper
     }
 
     // TODO: Rename method, update argument and hook method into UI event

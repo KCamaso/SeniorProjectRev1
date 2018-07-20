@@ -115,18 +115,9 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         fab = view.findViewById(R.id.fab_alarm);
 
         Log.e("MyMainApplication", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
-        AWSProvider.initialize(getContext());
 
-        AWSMobileClient.getInstance().initialize(getContext()).execute();
-        AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
-        AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
+        setupDynamoDB();
 
-        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
-
-        this.dynamoDBMapper = DynamoDBMapper.builder()
-                .dynamoDBClient(dynamoDBClient)
-                .awsConfiguration(config)
-                .build();
         if(fab != null)
         {
             fab.setOnClickListener(new View.OnClickListener()
@@ -215,6 +206,23 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
 
         return view;
 
+    }
+
+    private void setupDynamoDB()
+    {
+        // Sets up DynamoDBClient
+        AWSProvider.initialize(getContext());
+        AWSMobileClient.getInstance().initialize(getContext()).execute();
+        AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
+        AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
+
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(config)
+                .build();
+
+        // End of DynamoDB Setup, can now make calls using dynamoDBMapper
     }
 
 
