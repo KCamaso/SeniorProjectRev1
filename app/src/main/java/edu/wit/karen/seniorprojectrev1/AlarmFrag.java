@@ -1,6 +1,7 @@
 package edu.wit.karen.seniorprojectrev1;
 
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.amazonaws.mobileconnectors.pinpoint.targeting.notification.AppLevelOptOutProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    public  DynamoDBMapper dynamoDBMapper;
 
     FloatingActionButton fab;
     ArrayList<AlarmObj> list2 = new ArrayList<>();
@@ -112,8 +115,18 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         fab = view.findViewById(R.id.fab_alarm);
 
         Log.e("MyMainApplication", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
+        AWSProvider.initialize(getContext());
 
+        AWSMobileClient.getInstance().initialize(getContext()).execute();
+        AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
+        AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
 
+        AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
+
+        this.dynamoDBMapper = DynamoDBMapper.builder()
+                .dynamoDBClient(dynamoDBClient)
+                .awsConfiguration(config)
+                .build();
         if(fab != null)
         {
             fab.setOnClickListener(new View.OnClickListener()
@@ -139,10 +152,14 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
                         timerItem.setFromHour((double) rand);
                         timerItem.setToHour((double) rand2);
 
+
+
+
                     new Thread((new Runnable() {
                         @Override
                         public void run() {
-                            MainActivity.dynamoDBMapper.save(timerItem);
+                            dynamoDBMapper.save(timerItem);
+
                         }
                     })).start();
 
@@ -151,17 +168,8 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
                         @Override
                         public void run() {
 
-                            TimerDO timerRead = MainActivity.dynamoDBMapper.load(TimerDO.class, USER_ID,(double) rand);
-                            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-                            alertDialog.setTitle("Alert");
-                            alertDialog.setMessage("Number Returned" + timerRead.getToHour());
-                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                            alertDialog.show();
+                            TimerDO timerRead = dynamoDBMapper.load(TimerDO.class, USER_ID,(double) rand);
+                            Log.e("MyMainApplication", "HOLY SHIT, THE NUMBER IS:" + timerRead.getFromHour() + timerRead.getToHour());
 
                         }
                     }).start();
