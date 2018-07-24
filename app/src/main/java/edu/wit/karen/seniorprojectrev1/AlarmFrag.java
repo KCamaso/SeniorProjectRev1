@@ -3,6 +3,7 @@ package edu.wit.karen.seniorprojectrev1;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -125,6 +126,14 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
                 @Override
                 public void onClick(View view)
                 {
+
+                   Intent sendToAlarm = new Intent(getContext(), AlarmSend.class);
+
+                    //sendToAlarm.putExtra();
+
+                    startActivity(sendToAlarm);
+
+                    /* TEST, PUTTING A NUMBER TO THIS THIS
                     final TimerDO timerItem = new TimerDO();
 
                     timerItem.setUserId(USER_ID);
@@ -164,32 +173,16 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
 
                         }
                     }).start();
+                    */
 
 
-                    // TIME DIALOGUE PLACEHOLDER
-                    /*
-                    Toast.makeText(getContext(), "Action for adding alarm goes here!", Toast.LENGTH_SHORT).show();
-
-                    TimeDialog timeDialog = new TimeDialog();
-                    timeDialog.show(getFragmentManager(), "Time Dialogue"); */
                 }
             });
         }
 
 
 
-        /* TEST DISPLAY CODE */
-            /*
-       MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
-        ArrayList<MedObj> list1 = new ArrayList<>();
-        list1.add(med1);
-        boolean[] doW1 = {true,false,true,false,true,false,true};
-       AlarmObj alarm1 = new AlarmObj(4,20,16,46,true,true,doW1,list1);
-        AlarmObj alarm2 = new AlarmObj(15,20,15,46,true,false,doW1,list1);
 
-
-        list2.add(alarm1);
-        list2.add(alarm2);
 
         RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
 
@@ -199,7 +192,7 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
         RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
 
         recycList.setAdapter(mAdapter);
-        */
+
 
 
 

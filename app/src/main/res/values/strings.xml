@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SeniorProject</string>
+    <string name="app_name">TimeRx</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -22,4 +22,6 @@
     <string name="medNotify">Notify when prescription is low?</string>
     <string name="title_activity_authenticator">AuthenticatorActivity</string>
     <string name="welcomeTest">Welcome! Logging in...</string>
+    <string name="title_activity_medication_send">MedicationSend</string>
+    <string name="title_activity_alarm_send">AlarmSend</string>
 </resources>

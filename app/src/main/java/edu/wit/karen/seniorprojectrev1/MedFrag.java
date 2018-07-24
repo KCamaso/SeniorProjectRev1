@@ -1,6 +1,7 @@
 package edu.wit.karen.seniorprojectrev1;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -101,8 +102,11 @@ public class MedFrag extends Fragment {
                 @Override
                 public void onClick(View view)
                 {
-                    Toast.makeText(getContext(), "Action for adding medication goes here!", Toast.LENGTH_SHORT).show();
-                    openMedDia();
+                    Intent sendToMedication = new Intent(getContext(), AlarmSend.class);
+
+                    //sendToMedication.putExtra();
+
+                    startActivity(sendToMedication);
                 }
             });
         }
