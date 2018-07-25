@@ -24,4 +24,17 @@
     <string name="welcomeTest">Welcome! Logging in...</string>
     <string name="title_activity_medication_send">MedicationSend</string>
     <string name="title_activity_alarm_send">AlarmSend</string>
+    <string name="minute">Minute</string>
+    <string name="t">T</string>
+    <string name="m">M</string>
+    <string name="su">Su</string>
+    <string name="w">W</string>
+    <string name="th">Th</string>
+    <string name="f">F</string>
+    <string name="hour">Hour</string>
+
+    <string name="sa">Sa</string>
+    <string name="medSelText">Select Medication:</string>
+    <string name="entryWindow">Time Window?</string>
+    <string name="switchActive">Active?</string>
 </resources>

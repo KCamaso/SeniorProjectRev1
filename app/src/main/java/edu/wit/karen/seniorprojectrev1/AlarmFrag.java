@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.tokens.CognitoIdToken;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
@@ -36,6 +38,7 @@ import com.amazonaws.mobileconnectors.pinpoint.targeting.notification.AppLevelOp
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -49,7 +52,7 @@ import java.util.Timer;
  * Use the {@link AlarmFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListener {
+public class AlarmFrag extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -153,8 +156,6 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
                         timerItem.setToHour((double) rand2);
 
 
-
-
                     new Thread((new Runnable() {
                         @Override
                         public void run() {
@@ -184,14 +185,19 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
 
 
 
-        RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
+       PaginatedList<TimerDO> alarmList;
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
-        recycList.setLayoutManager(mLayoutManager);
 
-        RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
+       RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
 
-        recycList.setAdapter(mAdapter);
+       RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+       recycList.setLayoutManager(mLayoutManager);
+
+       RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
+
+       recycList.setAdapter(mAdapter);
+
+
 
 
 
@@ -234,14 +240,6 @@ public class AlarmFrag extends Fragment  implements TimeDialog.TimeDialogueListe
     }
 
 
-    @Override
-    public void applyInfo(int hour, int minute, boolean[] boxes) {
-        MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
-        ArrayList<MedObj> list1 = new ArrayList<>();
-        boolean[] doW1 = {true,false,true,false,true,false,true};
-      //  AlarmObj alarm1 = new AlarmObj(hour,minute,16,46,false,true,doW1,list1);// list2.add(alarm1);
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this

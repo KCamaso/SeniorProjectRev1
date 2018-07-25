@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.ViewHolder>{
 
-    List<MedObj>medItemListing;
+    List<MedicationDO>medItemListing;
     public static class ViewHolder extends  RecyclerView.ViewHolder
     {
         ImageView timeCheck;
@@ -47,7 +47,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
     }
 
 
-    MedicationAdapter(List<MedObj> medItemListing)
+    MedicationAdapter(List<MedicationDO> medItemListing)
     {
         this.medItemListing = medItemListing;
     }
@@ -73,9 +73,9 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
     {
         // Set resources here
 
-        MedObj med = medItemListing.get(i);
+        MedicationDO med = medItemListing.get(i);
 
-        itemViewHolder.number.setText( Integer.toString(med.getAmmnt()));
+        itemViewHolder.number.setText( Integer.parseInt(med.getCurrentNum()));
         itemViewHolder.descView.setText(med.getInfo());
         itemViewHolder.nameText.setText(med.getName());
 

@@ -2,14 +2,11 @@ package edu.wit.karen.seniorprojectrev1;
 
 
 import android.animation.ObjectAnimator;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -17,10 +14,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static android.view.View.GONE;
 
 /**
  * Created by camasok on 2/16/2018.
@@ -51,7 +45,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             alarmDate = (TextView) itemView.findViewById(R.id.alarmDateView);
             list = (ListView) itemView.findViewById(R.id.alarm_dynamic);
             activeSwitch = (Switch) itemView.findViewById(R.id.alarmSwitch);
-            moreButt = (Button) itemView.findViewById(R.id.alarmMoreButton);
+            moreButt = (Button) itemView.findViewById(R.id.alarmDeleteButton);
             editButt = (Button) itemView.findViewById(R.id.alarmEditButton);
             weekLayout = (ConstraintLayout) itemView.findViewById(R.id.weekLayout);
             checkBoxes = new CheckBox[] {itemView.findViewById(R.id.checkBoxSu),itemView.findViewById(R.id.checkBoxM),itemView.findViewById(R.id.checkBoxTu),itemView.findViewById(R.id.checkBoxW),itemView.findViewById(R.id.checkBoxTh),itemView.findViewById(R.id.checkBoxF),itemView.findViewById(R.id.checkBoxSa)};

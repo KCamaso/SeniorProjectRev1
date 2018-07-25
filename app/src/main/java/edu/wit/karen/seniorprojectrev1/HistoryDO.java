@@ -1,4 +1,4 @@
-package com.amazonaws.models.nosql;
+package edu.wit.karen.seniorprojectrev1;
 
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBAttribute;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBHashKey;
@@ -15,6 +15,7 @@ import java.util.Set;
 
 public class HistoryDO {
     private String _userId;
+    private Double _histId;
     private Set<String> _medList;
     private Boolean _taken;
     private String _timeStampRespond;
@@ -28,6 +29,14 @@ public class HistoryDO {
 
     public void setUserId(final String _userId) {
         this._userId = _userId;
+    }
+    @DynamoDBAttribute(attributeName = "histId")
+    public Double getHistId() {
+        return _histId;
+    }
+
+    public void setHistId(final Double _histId) {
+        this._histId = _histId;
     }
     @DynamoDBAttribute(attributeName = "medList")
     public Set<String> getMedList() {

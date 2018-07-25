@@ -151,11 +151,7 @@ public class MedFrag extends Fragment {
 
 
 
-    public void openMedDia()
-    {
-        MedicineDialog medDialog = new MedicineDialog();
-        medDialog.show(getChildFragmentManager(), "Medicine Dialogue");
-    }
+
 
     @Override
     public void onDetach() {

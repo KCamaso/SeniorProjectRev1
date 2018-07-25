@@ -21,6 +21,7 @@ public class TimerDO {
     private Double _fromMinute;
     private Boolean _isWindow;
     private Set<String> _medName;
+    private Double _timerId;
     private Double _toHour;
     private Double _toMinute;
 
@@ -81,6 +82,14 @@ public class TimerDO {
 
     public void setMedName(final Set<String> _medName) {
         this._medName = _medName;
+    }
+    @DynamoDBAttribute(attributeName = "timerId")
+    public Double getTimerId() {
+        return _timerId;
+    }
+
+    public void setTimerId(final Double _timerId) {
+        this._timerId = _timerId;
     }
     @DynamoDBAttribute(attributeName = "toHour")
     public Double getToHour() {

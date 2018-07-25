@@ -19,6 +19,7 @@ public class MedicationDO {
     private Boolean _infinite;
     private String _info;
     private String _maxNum;
+    private Double _medId;
     private String _name;
     private String _notify;
 
@@ -62,6 +63,14 @@ public class MedicationDO {
 
     public void setMaxNum(final String _maxNum) {
         this._maxNum = _maxNum;
+    }
+    @DynamoDBAttribute(attributeName = "medId")
+    public Double getMedId() {
+        return _medId;
+    }
+
+    public void setMedId(final Double _medId) {
+        this._medId = _medId;
     }
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {

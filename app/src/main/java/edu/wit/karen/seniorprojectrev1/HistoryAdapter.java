@@ -20,7 +20,7 @@ import java.util.List;
 public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHolder>{
 
 
-    public List<HistoryObj> mHistory;
+    public List<HistoryDO> mHistory;
     public static class ViewHolder extends  RecyclerView.ViewHolder
     {
 
@@ -47,7 +47,7 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
     }
 
 
-    HistoryAdapter(List<HistoryObj> historum)
+    HistoryAdapter(List<HistoryDO> historum)
     {
         mHistory = historum;
     }
@@ -71,9 +71,9 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder itemViewHolder, int i)
     {
-        HistoryObj hHistory = mHistory.get(i);
+        HistoryDO hHistory = mHistory.get(i);
 
-        if(hHistory.getDismissed().toString().equals("true"))
+        if(hHistory.getTaken().toString().equals("true"))
         {
             itemViewHolder.timeText.setText("Taken");
         }
@@ -83,7 +83,7 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
         }
 
 
-       itemViewHolder.missView.setText( hHistory.getMissedMeds().toString());
+       itemViewHolder.missView.setText( hHistory.getMedList().toString());
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("EEEE, MMMM d, yyyy");
