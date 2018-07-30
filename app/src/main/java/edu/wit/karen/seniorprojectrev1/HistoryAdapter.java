@@ -41,7 +41,7 @@ public class HistoryAdapter extends  RecyclerView.Adapter<HistoryAdapter.ViewHol
          timeText = (TextView) itemView.findViewById(R.id.timeText);
          missView = (TextView) itemView.findViewById(R.id.missView);
          dateView = (TextView) itemView.findViewById(R.id.dateView);
-         buttonDelete = (Button) itemView.findViewById(R.id.buttonDelete);
+         buttonDelete = (Button) itemView.findViewById(R.id.buttonMedEdit);
 
         }
     }

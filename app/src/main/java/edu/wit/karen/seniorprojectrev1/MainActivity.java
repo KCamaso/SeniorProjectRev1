@@ -2,6 +2,7 @@ package edu.wit.karen.seniorprojectrev1;
 
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,12 +55,14 @@ public class MainActivity extends AppCompatActivity
     public static CognitoCachingCredentialsProvider cogCredentialsProvider;
     public static IdentityManager identityManager;
     public static String userId;
+    private static Context context;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MainActivity.context = getApplicationContext();
 
 
 
@@ -165,11 +168,11 @@ public class MainActivity extends AppCompatActivity
     public void  onResume()
     {
         super.onResume();
-
-
     }
 
-
+    public static Context getAppContext() {
+        return MainActivity.context;
+    }
 
 
     @Override

@@ -2,6 +2,10 @@ package edu.wit.karen.seniorprojectrev1;
 
 
 import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.app.Application;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +18,11 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by camasok on 2/16/2018.
@@ -22,28 +30,29 @@ import java.util.List;
 
 public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>{
 
-    public List<AlarmObj> mAlarms;
+    public List<TimerDO> mAlarms;
+    public static CheckBox[] checkBoxes;
     public static class ViewHolder extends  RecyclerView.ViewHolder
     {
 
         ImageView statusImage;
         TextView alarmTime;
         TextView alarmDate;
-        ListView list;
+        TextView list;
         Switch activeSwitch;
         Button moreButt;
         Button editButt;
         ConstraintLayout weekLayout;
 
-        CheckBox[] checkBoxes;
 
-        public ViewHolder(View itemView) {
+
+        public ViewHolder(final View itemView) {
             super(itemView);
 
             statusImage = (ImageView) itemView.findViewById(R.id.timeCheck);
             alarmTime = (TextView) itemView.findViewById(R.id.alarmTimeView);
             alarmDate = (TextView) itemView.findViewById(R.id.alarmDateView);
-            list = (ListView) itemView.findViewById(R.id.alarm_dynamic);
+            list = (TextView) itemView.findViewById(R.id.alarm_dynamic);
             activeSwitch = (Switch) itemView.findViewById(R.id.alarmSwitch);
             moreButt = (Button) itemView.findViewById(R.id.alarmDeleteButton);
             editButt = (Button) itemView.findViewById(R.id.alarmEditButton);
@@ -68,13 +77,15 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             });
 
 
+
+
         }
 
 
 
     }
 
-    public AlarmAdapter(List<AlarmObj> alarum)
+    public AlarmAdapter(List<TimerDO> alarum)
 
     {
         mAlarms = alarum;
@@ -101,19 +112,19 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     public void onBindViewHolder(final ViewHolder viewHolder, int i)
     {
 
-            AlarmObj alarm = mAlarms.get(i);
-            boolean active = alarm.isActive();
+            final TimerDO alarm = mAlarms.get(i);
+            boolean active = alarm.getActive();
 
-            if(mAlarms.get(i).isWindow() == false)
+            if(mAlarms.get(i).getActive() == false)
             {
-                int fromHour = alarm.getFromHour();
-                int fromMinute = alarm.getFromMinute();
+                int fromHour = (alarm.getToHour().intValue());
+                int fromMinute = alarm.getToMinute().intValue();
 
-                boolean[] week = alarm.getDayOfWeek();
-                List<String> meds = alarm.getMedications();
+                Set<Double> week = alarm.getDayOfWeek();
+                Set<String> meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
-                weekCheck(viewHolder, week);
+                weekCheck(week);
                 medList(viewHolder, meds);
                 viewHolder.alarmDate.setVisibility(View.VISIBLE);
 
@@ -121,17 +132,17 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             }
             else
             {
-                int fromHour = mAlarms.get(i).getFromHour();
-                int fromMinute = mAlarms.get(i).getFromMinute();
-                int toHour = mAlarms.get(i).getToHour();
-                int toMinute = mAlarms.get(i).getToHour();
+                int fromHour = alarm.getFromHour().intValue();
+                int fromMinute = alarm.getFromMinute().intValue();
+                int toHour = mAlarms.get(i).getToHour().intValue();
+                int toMinute = mAlarms.get(i).getToHour().intValue();
 
-                boolean[] week = alarm.getDayOfWeek();
-                List<String> meds = alarm.getMedications();
+                Set<Double> week = alarm.getDayOfWeek();
+                Set<String> meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 viewHolder.alarmDate.setText(toHour + ":" + toMinute);
-                weekCheck(viewHolder, week);
+                weekCheck(week);
                 medList(viewHolder, meds);
 
             }
@@ -142,19 +153,62 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
             }
 
+        viewHolder.editButt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle sendData = new Bundle();
+
+                double[] bundleTimeFrom = { alarm.getFromHour(), alarm.getFromMinute()};
+                double[] bundleTimeTo = {alarm.getToHour(), alarm.getToMinute()};
+
+                boolean[] checkBoxBoolean = new boolean[7];
+                for(int i = 0; i < checkBoxes.length; i++)
+                {
+                    checkBoxBoolean[i] = checkBoxes[i].isChecked();
+                }
+
+                sendData.putDoubleArray("timeFrom", bundleTimeFrom);
+                sendData.putDoubleArray("timeTo", bundleTimeTo);
+                sendData.putBooleanArray("weekDay", checkBoxBoolean);
+                sendData.putDouble("alarmId", alarm.getTimerId());
+
+                Intent sendAlarm = new Intent(v.getContext(), AlarmSend.class);
+                sendAlarm.putExtras(sendData);
+                v.getContext().startActivity(sendAlarm);
+
+
+
+
+
+            }
+        });
+
     }
 
-    public void weekCheck(ViewHolder viewHolder, boolean[] days)
+    public void weekCheck( Set<Double> days)
     {
-        for(int i = 0; i < 6; i++)
+        Iterator<Double> daysIterator = days.iterator();
+        int w = 0;
+        while (daysIterator.hasNext())
         {
-                viewHolder.checkBoxes[i].setChecked( days[i] );
+                Double number = daysIterator.next();
+                if(number.intValue() == 1.0 )
+                {
+                    checkBoxes[w].setChecked(true);
+                }
+                else
+                {
+                    checkBoxes[w].setChecked(false);
+                }
+                w++;
         }
     }
 
-    public void medList(ViewHolder viewHolder, List<String> meds)
+    public void medList(ViewHolder viewHolder, Set<String> meds)
     {
-
+        Iterator<String> medSimple = meds.iterator();
+        String medName = medSimple.next();
+        viewHolder.list.setText(medName);
     }
 
     @Override

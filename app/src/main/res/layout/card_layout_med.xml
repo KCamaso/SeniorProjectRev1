@@ -68,7 +68,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/timeText" />
 
             <Button
-                android:id="@+id/buttonDelete"
+                android:id="@+id/buttonMedEdit"
                 style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,9 +87,9 @@
                 android:layout_marginStart="4dp"
                 android:text="Refill"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/buttonDelete"
-                app:layout_constraintStart_toStartOf="@+id/buttonDelete"
-                app:layout_constraintTop_toBottomOf="@+id/buttonDelete" />
+                app:layout_constraintEnd_toEndOf="@+id/buttonMedEdit"
+                app:layout_constraintStart_toStartOf="@+id/buttonMedEdit"
+                app:layout_constraintTop_toBottomOf="@+id/buttonMedEdit" />
 
             <EditText
                 android:id="@+id/numberText"
@@ -108,7 +108,7 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonDelete"
+                app:layout_constraintEnd_toStartOf="@+id/buttonMedEdit"
                 app:layout_constraintHorizontal_bias="0.351"
                 app:layout_constraintStart_toEndOf="@+id/timeText"
                 app:layout_constraintTop_toTopOf="parent"

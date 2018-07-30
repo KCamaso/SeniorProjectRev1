@@ -17,7 +17,7 @@ public class TimerDO {
     private String _userId;
     private Double _fromHour;
     private Boolean _active;
-    private Set<byte[]> _dayOfWeek;
+    private Set<Double> _dayOfWeek;
     private Double _fromMinute;
     private Boolean _isWindow;
     private Set<String> _medName;
@@ -52,11 +52,11 @@ public class TimerDO {
         this._active = _active;
     }
     @DynamoDBAttribute(attributeName = "dayOfWeek")
-    public Set<byte[]> getDayOfWeek() {
+    public Set<Double> getDayOfWeek() {
         return _dayOfWeek;
     }
 
-    public void setDayOfWeek(final Set<byte[]> _dayOfWeek) {
+    public void setDayOfWeek(final Set<Double> _dayOfWeek) {
         this._dayOfWeek = _dayOfWeek;
     }
     @DynamoDBAttribute(attributeName = "fromMinute")

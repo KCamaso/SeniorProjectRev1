@@ -69,7 +69,7 @@ public class AlarmFrag extends Fragment {
     public  DynamoDBMapper dynamoDBMapper;
 
     FloatingActionButton fab;
-    ArrayList<AlarmObj> list2 = new ArrayList<>();
+    ArrayList<TimerDO> list2 = new ArrayList<>();
 
 
     public AlarmFrag() {
@@ -122,6 +122,18 @@ public class AlarmFrag extends Fragment {
 
         setupDynamoDB();
 
+
+       PaginatedList<TimerDO> alarmList;
+
+
+       RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
+
+       RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
+       recycList.setLayoutManager(mLayoutManager);
+
+       RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
+
+       recycList.setAdapter(mAdapter);
         if(fab != null)
         {
             fab.setOnClickListener(new View.OnClickListener()
@@ -130,7 +142,7 @@ public class AlarmFrag extends Fragment {
                 public void onClick(View view)
                 {
 
-                   Intent sendToAlarm = new Intent(getContext(), AlarmSend.class);
+                    Intent sendToAlarm = new Intent(getContext(), AlarmSend.class);
 
                     //sendToAlarm.putExtra();
 
@@ -180,22 +192,6 @@ public class AlarmFrag extends Fragment {
                 }
             });
         }
-
-
-
-
-
-       PaginatedList<TimerDO> alarmList;
-
-
-       RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
-
-       RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
-       recycList.setLayoutManager(mLayoutManager);
-
-       RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
-
-       recycList.setAdapter(mAdapter);
 
 
 

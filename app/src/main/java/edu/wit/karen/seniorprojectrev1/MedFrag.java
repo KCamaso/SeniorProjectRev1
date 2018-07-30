@@ -104,8 +104,6 @@ public class MedFrag extends Fragment {
                 {
                     Intent sendToMedication = new Intent(getContext(), AlarmSend.class);
 
-                    //sendToMedication.putExtra();
-
                     startActivity(sendToMedication);
                 }
             });

@@ -174,7 +174,7 @@
     </TableLayout>
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/medSpinner"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -190,7 +190,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toStartOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="@+id/medSpinner"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout"
         tools:text="@string/medSelText" />
 
@@ -216,6 +216,6 @@
         android:checked="true"
         android:text="Switch"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintTop_toBottomOf="@+id/medSpinner"
         tools:text="@string/switchActive" />
 </android.support.constraint.ConstraintLayout>

@@ -24,11 +24,12 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
         ImageView timeCheck;
         TextView nameText;
         TextView descView;
-        Button buttonDelete;
+        Button buttonEdit;
         Button buttonRefill;
         EditText number;
         Button buttonPlus;
         Button buttonMinus;
+
 
 
         ViewHolder(View itemView){
@@ -37,7 +38,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             timeCheck = itemView.findViewById(R.id.timeCheck);
             nameText = itemView.findViewById(R.id.timeText);
             descView = itemView.findViewById(R.id.descView);
-            buttonDelete = itemView.findViewById(R.id.buttonDelete);
+            buttonEdit = itemView.findViewById(R.id.buttonMedEdit);
             buttonRefill = itemView.findViewById(R.id.buttonRefill);
             number = itemView.findViewById(R.id.numberText);
             buttonPlus = itemView.findViewById(R.id.buttonPlus);
@@ -83,9 +84,20 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
 
     }
 
-    public void onClick(ViewHolder v)
-    {
 
+    public void onClick(View v)
+    {
+            switch(v.getId())
+            {
+                case R.id.buttonPlus:
+                    break;
+                case R.id.buttonMinus:
+                    break;
+                case R.id.buttonMedEdit:
+                    break;
+                case R.id.buttonRefill:
+                    break;
+            }
     }
 
     @Override
