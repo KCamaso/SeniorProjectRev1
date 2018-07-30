@@ -3,6 +3,7 @@ package edu.wit.karen.seniorprojectrev1;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,6 +25,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
+import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.Calendar;
@@ -80,7 +82,7 @@ public class AlarmSend extends AppCompatActivity {
         //medSpinner.setAdapter();
 
 
-        if(!savedInstanceState.isEmpty()) {
+        if(! (savedInstanceState == null)) {
             // Editing, update the item.
             unpack(savedInstanceState);
             setupDynamoDB();
@@ -114,6 +116,13 @@ public class AlarmSend extends AppCompatActivity {
 
                             }
                         })).start();
+
+                        final AnalyticsEvent editEvent = pinpointManager.getAnalyticsClient().createEvent("EditAlarm")
+                                .withAttribute("AlarmId", timerItem.getTimerId().toString());
+
+                        pinpointManager.getAnalyticsClient().recordEvent(editEvent);
+                        Intent sendBack = new Intent(AlarmSend.this, MainActivity.class);
+                        startActivity(sendBack);
                     }
                     else
                     {
@@ -154,6 +163,15 @@ public class AlarmSend extends AppCompatActivity {
 
                             }
                         })).start();
+
+                        final AnalyticsEvent editEvent = pinpointManager.getAnalyticsClient().createEvent("NewAlarm")
+                                .withAttribute("AlarmId", timerItem.getTimerId().toString());
+
+                        pinpointManager.getAnalyticsClient().recordEvent(editEvent);
+
+                        Intent sendBack = new Intent(AlarmSend.this, MainActivity.class);
+                        startActivity(sendBack);
+
                     }
                     else
                     {
@@ -182,6 +200,8 @@ public class AlarmSend extends AppCompatActivity {
         {
             flag = true;
         }
+
+
 
         return flag;
     }
@@ -226,7 +246,11 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setActive(switchActive.isChecked());
 
         HashSet<String> tempString = new HashSet<>();
-        tempString.add(medSpinner.getSelectedItem().toString());
+        if(medSpinner.getSelectedItem().toString() != null)
+        {
+            tempString.add(medSpinner.getSelectedItem().toString());
+        }
+
         toSend.setMedName(tempString);
 
 
@@ -266,7 +290,7 @@ public class AlarmSend extends AppCompatActivity {
     {
         // Sets up DynamoDBClient
         AWSProvider.initialize(MainActivity.getAppContext());
-        AWSMobileClient.getInstance().initialize(MainActivity.getAppContext()).execute();
+        AWSMobileClient.getInstance().initialize(AlarmSend.this).execute();
         AWSCredentialsProvider cp = AWSMobileClient.getInstance().getCredentialsProvider();
         AWSConfiguration config = AWSMobileClient.getInstance().getConfiguration();
         AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient(cp);
@@ -289,6 +313,14 @@ public class AlarmSend extends AppCompatActivity {
         });
 
         // End of DynamoDB Setup, can now make calls using dynamoDBMapper
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        pinpointManager.getSessionClient().stopSession();
+        pinpointManager.getAnalyticsClient().submitEvents();
     }
 
 

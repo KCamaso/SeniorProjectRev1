@@ -51,11 +51,14 @@ public class MedicationSend extends AppCompatActivity {
 
     public void unpack(Bundle sentData)
     {
+        /*
 
         timeFrom = sentData.getDoubleArray("timeFrom");
         timeTo = sentData.getDoubleArray("timeTo");
         weekDayChecks =  sentData.getBooleanArray("weekDay");
         alarmId = sentData.getInt("alarmId");
+
+        */
     }
 
     private void setupDynamoDB()
