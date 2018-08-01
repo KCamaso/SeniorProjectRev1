@@ -24,6 +24,7 @@ import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -39,7 +40,7 @@ public class AlarmSend extends AppCompatActivity {
     public  static DynamoDBMapper dynamoDBMapper;
     public static CognitoCachingCredentialsProvider cogCredentialsProvider;
     public static IdentityManager identityManager;
-    public static String USER_ID;
+    public static String USER_ID = MainActivity.userId;
     private static Context context;
 
     private double[] timeFrom;
@@ -80,6 +81,7 @@ public class AlarmSend extends AppCompatActivity {
 
         // Setup Medication List here TODO
         //medSpinner.setAdapter();
+        Log.e("AlarmActivity", "USER ID IS"+ USER_ID);
 
 
         if(! (savedInstanceState == null)) {
@@ -91,11 +93,49 @@ public class AlarmSend extends AppCompatActivity {
 
             // Setting the fields, they haven't made a final selection.
             timerItem.setUserId(USER_ID);
-            timerItem.setFromHour(timeFrom[0]);
-            timerItem.setFromMinute(timeFrom[1]);
             timerItem.setTimerId(Double.valueOf(alarmId));
-            timerItem.setToHour(timeTo[0]);
-            timerItem.setToMinute(timeTo[1]);
+
+            try
+            {
+                timerItem.setFromHour(timeFrom[0]);
+            }
+            catch (NullPointerException e)
+            {
+                Log.e("SendActivity","From Missing, leaving Empty");
+            }
+
+            try
+            {
+                timerItem.setFromMinute(timeFrom[1]);
+            }
+            catch (NullPointerException e)
+            {
+                Log.e("SendActivity","From Missing, leaving Empty");
+            }
+
+            try
+            {
+                timerItem.setToHour(timeTo[0]);
+            }
+            catch (NullPointerException e)
+            {
+                Log.e("SendActivity","To Hour Missing, leaving Empty");
+            }
+
+            try
+            {
+                timerItem.setToMinute(timeTo[1]);
+            }
+            catch (NullPointerException e)
+            {
+                Log.e("SendActivity","From Missing, leaving Empty");
+            }
+
+
+
+
+
+
             timerItem.setDayOfWeek(weekConvert(weekDayChecks));
 
             setValues(timerItem);
@@ -148,7 +188,7 @@ public class AlarmSend extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    timerItem.setUserId(USER_ID);
+
                     timerItem = getValues();
                     timerItem.setTimerId(Double.parseDouble(new Long(Calendar.getInstance().getTimeInMillis()).toString()));
                     if (valueCheck(timerItem))
@@ -168,6 +208,8 @@ public class AlarmSend extends AppCompatActivity {
                                 .withAttribute("AlarmId", timerItem.getTimerId().toString());
 
                         pinpointManager.getAnalyticsClient().recordEvent(editEvent);
+                        Snackbar.make(view, "Error: Please make sure the hours are within 0 and 23, and hours between 0 and 59.", Snackbar.LENGTH_LONG)
+                                .show();
 
                         Intent sendBack = new Intent(AlarmSend.this, MainActivity.class);
                         startActivity(sendBack);
@@ -195,8 +237,8 @@ public class AlarmSend extends AppCompatActivity {
         boolean flag = false;
 
         if(
-                checkable.getFromHour().intValue() < 23 && checkable.getFromMinute().intValue() < 60
-                && checkable.getToHour().intValue() < 23 && checkable.getToMinute().intValue() < 60)
+                checkable.getFromHour().intValue() < 24 && checkable.getFromMinute().intValue() < 60
+                && checkable.getToHour().intValue() < 24 && checkable.getToMinute().intValue() < 60)
         {
             flag = true;
         }
@@ -238,6 +280,7 @@ public class AlarmSend extends AppCompatActivity {
     public TimerDO getValues()
     {
         TimerDO toSend = new TimerDO();
+        toSend.setUserId(USER_ID);
         toSend.setFromHour( Double.parseDouble(diaHour.getText().toString()));
         toSend.setFromMinute( Double.parseDouble(diaMinute.getText().toString()));
         toSend.setToHour( Double.parseDouble(diaHour2.getText().toString()));
@@ -246,12 +289,22 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setActive(switchActive.isChecked());
 
         HashSet<String> tempString = new HashSet<>();
-        if(medSpinner.getSelectedItem().toString() != null)
+        Object selected = null;
+
+        try{
+            medSpinner.getSelectedItem();
+        }
+        catch(NullPointerException e)
+        {
+
+        }
+        if(selected != null)
         {
             tempString.add(medSpinner.getSelectedItem().toString());
+            toSend.setMedName(tempString);
         }
 
-        toSend.setMedName(tempString);
+
 
 
         return toSend;
@@ -300,17 +353,10 @@ public class AlarmSend extends AppCompatActivity {
                 .awsConfiguration(config)
                 .build();
 
-        IdentityManager.getDefaultIdentityManager().getUserID(new IdentityHandler() {
-            @Override
-            public void onIdentityId(String identityId) {
-                USER_ID = identityId;
-            }
-
-            @Override
-            public void handleError(Exception exception) {
-                Log.e("MyMainActivity", exception.toString());
-            }
-        });
+        PinpointConfiguration pinpointConfig = new PinpointConfiguration( AlarmSend.this, cp,config);
+        pinpointManager = new PinpointManager(pinpointConfig);
+        pinpointManager.getSessionClient().startSession();
+        pinpointManager.getAnalyticsClient().submitEvents();
 
         // End of DynamoDB Setup, can now make calls using dynamoDBMapper
     }
