@@ -18,6 +18,9 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +33,7 @@ import static java.security.AccessController.getContext;
 
 public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>{
 
-    public List<TimerDO> mAlarms;
+    public ArrayList<TimerDO> mAlarms;
     public static CheckBox[] checkBoxes;
     public static class ViewHolder extends  RecyclerView.ViewHolder
     {
@@ -85,7 +88,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
     }
 
-    public AlarmAdapter(List<TimerDO> alarum)
+    public AlarmAdapter(ArrayList<TimerDO> alarum)
 
     {
         mAlarms = alarum;
@@ -96,7 +99,15 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     @Override
     public int getItemCount()
     {
-        return mAlarms.size();
+        if(mAlarms == null)
+        {
+            return 0;
+        }
+        else
+        {
+            return mAlarms.size();
+        }
+
     }
 
     @Override
@@ -134,8 +145,8 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             {
                 int fromHour = alarm.getFromHour().intValue();
                 int fromMinute = alarm.getFromMinute().intValue();
-                int toHour = mAlarms.get(i).getToHour().intValue();
-                int toMinute = mAlarms.get(i).getToHour().intValue();
+                int toHour = alarm.getToHour().intValue();
+                int toMinute = alarm.getToHour().intValue();
 
                 Set<Double> week = alarm.getDayOfWeek();
                 Set<String> meds = alarm.getMedName();

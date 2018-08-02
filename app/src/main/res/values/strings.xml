@@ -37,4 +37,6 @@
     <string name="medSelText">Select Medication:</string>
     <string name="entryWindow">Time Window?</string>
     <string name="switchActive">Active?</string>
+    <string name="timerDialogInput">Time From: (24 hour format)</string>
+    <string name="timerSelectTo">Time To: (24 hour format)</string>
 </resources>

@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -25,9 +27,28 @@ public class MedicationSend extends AppCompatActivity {
     public  static DynamoDBMapper dynamoDBMapper;
     public static CognitoCachingCredentialsProvider cogCredentialsProvider;
     public static IdentityManager identityManager;
-    public static String userId;
+    public static String USER_ID = MainActivity.userId;
     private static Context context;
 
+    EditText diaMedName;
+    EditText diaMedDesc;
+    EditText diaMedCurrent;
+    EditText diaMedMax;
+    Switch infiniteDoseCheck;
+    Switch diaMedNotifySwitch;
+    EditText diaMedNotify;
+
+    private String userId;
+    private String currentNum;
+    private Boolean infinite;
+    private String info;
+    private String maxNum;
+    private Double medId;
+    private String name;
+    private String notify;
+
+
+    public MedicationDO medItem = new MedicationDO();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,19 +67,52 @@ public class MedicationSend extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setupDynamoDB();
+        diaMedName = findViewById(R.id.diaMedName);
+        diaMedDesc = findViewById(R.id.diaMedDesc);
+        diaMedCurrent = findViewById(R.id.diaMedCurrent);
+        diaMedMax = findViewById(R.id.diaMedMax);
+        infiniteDoseCheck = findViewById(R.id.infiniteDoseCheck);
+        diaMedNotifySwitch = findViewById(R.id.diaMedNotifySwitch);
+        diaMedNotify = findViewById(R.id.diaMedNotify);
+
+
+        if(!(savedInstanceState == null))
+        { // Editing, update the item.
+            unpack(savedInstanceState);
+            setupDynamoDB();
+
+            medItem.setUserId(USER_ID);
+            medItem.setMedId(Double.valueOf(medId));
+            setValues(medItem);
+        }
+        else
+        {
+
+        }
     }
 
     public void unpack(Bundle sentData)
     {
-        /*
+        name = sentData.getString("name");
+        info = sentData.getString("desc");
+        userId = sentData.getString("userId");
+        currentNum = sentData.getString("currentNumber");
+        medId = sentData.getDouble("medId");
+        maxNum = sentData.getString("bundleMedMax");
+        notify = sentData.getString("notify");
+        infinite = sentData.getBoolean("infinite");
 
-        timeFrom = sentData.getDoubleArray("timeFrom");
-        timeTo = sentData.getDoubleArray("timeTo");
-        weekDayChecks =  sentData.getBooleanArray("weekDay");
-        alarmId = sentData.getInt("alarmId");
+    }
 
-        */
+    public void setValues(MedicationDO medItem)
+    {
+        diaMedName.setText(medItem.getName());
+        diaMedDesc.setText(medItem.getInfo());
+        diaMedCurrent.setText(medItem.getCurrentNum());
+        diaMedMax.setText(medItem.getMaxNum());
+        infiniteDoseCheck.setChecked(medItem.getInfinite());
+        diaMedNotify.setText( medItem.getNotifyNum());
+        diaMedNotifySwitch.setChecked(medItem.getNotify());
     }
 
     private void setupDynamoDB()
@@ -75,17 +129,7 @@ public class MedicationSend extends AppCompatActivity {
                 .awsConfiguration(config)
                 .build();
 
-        IdentityManager.getDefaultIdentityManager().getUserID(new IdentityHandler() {
-            @Override
-            public void onIdentityId(String identityId) {
-                userId = identityId;
-            }
 
-            @Override
-            public void handleError(Exception exception) {
-                Log.e("MyMainActivity", exception.toString());
-            }
-        });
 
         // End of DynamoDB Setup, can now make calls using dynamoDBMapper
     }

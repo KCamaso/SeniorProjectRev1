@@ -29,6 +29,8 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.cognitoidentityprovider.tokens.CognitoIdToken;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBTable;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
@@ -36,6 +38,10 @@ import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.pinpoint.targeting.notification.AppLevelOptOutProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
+import com.google.gson.internal.Primitives;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +75,9 @@ public class AlarmFrag extends Fragment {
     public  DynamoDBMapper dynamoDBMapper;
 
     FloatingActionButton fab;
-    ArrayList<TimerDO> list2 = new ArrayList<>();
+    public PaginatedList<TimerDO> alarmList;
+    public ArrayList<TimerDO> adaptList = new ArrayList<>();
+
 
 
     public AlarmFrag() {
@@ -123,7 +131,36 @@ public class AlarmFrag extends Fragment {
         setupDynamoDB();
 
 
-       PaginatedList<TimerDO> alarmList;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                TimerDO template = new TimerDO();
+                template.setUserId(USER_ID);
+                template.setTimerId(1.0);
+
+                Condition rangeKeyCondition = new Condition()
+                        .withComparisonOperator(ComparisonOperator.GT)
+                        .withAttributeValueList(new AttributeValue().withN("0"));
+
+                DynamoDBQueryExpression<TimerDO> queryExpression;
+                queryExpression = new DynamoDBQueryExpression<>();
+                queryExpression.withHashKeyValues(template);
+                queryExpression.withRangeKeyCondition("fromHour", rangeKeyCondition);
+                queryExpression.withConsistentRead(false);
+
+                alarmList = dynamoDBMapper.query(TimerDO.class,queryExpression);
+                Log.e("AlarmActivity", String.valueOf(alarmList.get(0).getTimerId()));
+                Log.e("AlarmActivity", String.valueOf(alarmList.get(1).getTimerId()));
+
+                for (TimerDO timerDO : alarmList) {
+                    adaptList.add(timerDO);
+                }
+
+            }
+        }).start();
+
 
 
        RecyclerView recycList = view.findViewById(R.id.alarmRecycler);
@@ -131,9 +168,9 @@ public class AlarmFrag extends Fragment {
        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
        recycList.setLayoutManager(mLayoutManager);
 
-       RecyclerView.Adapter mAdapter = new AlarmAdapter(list2);
+       RecyclerView.Adapter mAdapter = new AlarmAdapter(adaptList);
 
-       recycList.setAdapter(mAdapter);
+      recycList.setAdapter(mAdapter);
         if(fab != null)
         {
             fab.setOnClickListener(new View.OnClickListener()

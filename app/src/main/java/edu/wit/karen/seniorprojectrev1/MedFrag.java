@@ -102,7 +102,7 @@ public class MedFrag extends Fragment {
                 @Override
                 public void onClick(View view)
                 {
-                    Intent sendToMedication = new Intent(getContext(), AlarmSend.class);
+                    Intent sendToMedication = new Intent(getContext(), MedicationSend.class);
 
                     startActivity(sendToMedication);
                 }

@@ -1,6 +1,8 @@
 package edu.wit.karen.seniorprojectrev1;
 
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,31 +76,47 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
     {
         // Set resources here
 
-        MedicationDO med = medItemListing.get(i);
+        final MedicationDO med = medItemListing.get(i);
 
         itemViewHolder.number.setText( Integer.parseInt(med.getCurrentNum()));
         itemViewHolder.descView.setText(med.getInfo());
         itemViewHolder.nameText.setText(med.getName());
 
+    itemViewHolder.buttonEdit.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Bundle sendData = new Bundle();
 
+            String bundleName = med.getName();
+            String bundleDesc = med.getInfo();
+            String bundleUserId = med.getUserId();
+            String bundleCurrentNumber = med.getCurrentNum();
+            Double bundleMedId = med.getMedId();
+            String bundleMedMax = med.getMaxNum();
+            Boolean bundleInfinite = med.getInfinite();
+            Boolean notify = med.getNotify();
+            String notifyNumber = med.getNotify().toString();
+
+            sendData.putString("name",bundleName);
+            sendData.putString("desc",bundleDesc);
+            sendData.putString("userId",bundleUserId);
+            sendData.putString("currentNumber",bundleCurrentNumber);
+            sendData.putDouble("medId",bundleMedId);
+            sendData.putString("bundleMedMax",bundleMedMax);
+            sendData.putBoolean("notify",notify);
+            sendData.putBoolean("infinite", bundleInfinite);
+            sendData.putString("notifyNumber", notifyNumber);
+
+            Intent sendMedication = new Intent(v.getContext(), MedicationSend.class);
+            sendMedication.putExtras(sendData);
+            v.getContext().startActivity(sendMedication);
+
+        }
+    });
 
     }
 
 
-    public void onClick(View v)
-    {
-            switch(v.getId())
-            {
-                case R.id.buttonPlus:
-                    break;
-                case R.id.buttonMinus:
-                    break;
-                case R.id.buttonMedEdit:
-                    break;
-                case R.id.buttonRefill:
-                    break;
-            }
-    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView)

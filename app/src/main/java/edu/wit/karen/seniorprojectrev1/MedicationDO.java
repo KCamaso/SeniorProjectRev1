@@ -21,7 +21,8 @@ public class MedicationDO {
     private String _maxNum;
     private Double _medId;
     private String _name;
-    private String _notify;
+    private Boolean _notify;
+    private String _notifyNum;
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
@@ -81,12 +82,20 @@ public class MedicationDO {
         this._name = _name;
     }
     @DynamoDBAttribute(attributeName = "notify")
-    public String getNotify() {
+    public Boolean getNotify() {
         return _notify;
     }
 
-    public void setNotify(final String _notify) {
+    public void setNotify(final Boolean _notify) {
         this._notify = _notify;
+    }
+    @DynamoDBAttribute(attributeName = "notifyNum")
+    public String getNotifyNum() {
+        return _notifyNum;
+    }
+
+    public void setNotifyNum(final String _notifyNum) {
+        this._notifyNum = _notifyNum;
     }
 
 }

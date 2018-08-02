@@ -26,7 +26,7 @@ public class TimerDO {
     private Double _toMinute;
 
     @DynamoDBHashKey(attributeName = "userId")
-    @DynamoDBAttribute(attributeName = "userId")
+    @DynamoDBIndexHashKey(attributeName = "userId", globalSecondaryIndexName = "timers")
     public String getUserId() {
         return _userId;
     }
@@ -83,7 +83,7 @@ public class TimerDO {
     public void setMedName(final Set<String> _medName) {
         this._medName = _medName;
     }
-    @DynamoDBAttribute(attributeName = "timerId")
+    @DynamoDBIndexRangeKey(attributeName = "timerId", globalSecondaryIndexName = "timers")
     public Double getTimerId() {
         return _timerId;
     }
