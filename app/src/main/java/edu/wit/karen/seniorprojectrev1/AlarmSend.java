@@ -45,7 +45,7 @@ public class AlarmSend extends AppCompatActivity {
 
     private double[] timeFrom;
     private double[] timeTo;
-    private boolean[] weekDayChecks;
+    private String weekDayChecks;
     private int alarmId;
 
     public EditText diaMinute;
@@ -136,7 +136,7 @@ public class AlarmSend extends AppCompatActivity {
 
 
 
-            timerItem.setDayOfWeek(weekConvert(weekDayChecks));
+            timerItem.setDayOfWeek(weekDayChecks);
 
             setValues(timerItem);
 
@@ -257,21 +257,16 @@ public class AlarmSend extends AppCompatActivity {
         switchActive.setChecked(info.getActive());
         switchWindow.setChecked(info.getIsWindow());
 
-        Iterator<Double> daysIterator = info.getDayOfWeek().iterator();
-
-        int w = 0;
-        while (daysIterator.hasNext())
+        for(int i = 0; i < 7; i++)
         {
-            Double number = daysIterator.next();
-            if(number.intValue() == 1.0 )
+            if(info.getDayOfWeek().charAt(i) == 0)
             {
-                weekBox[w].setChecked(true);
+                weekBox[i].setChecked(false);
             }
             else
             {
-                weekBox[w].setChecked(false);
+                weekBox[i].setChecked(true);
             }
-            w++;
         }
 
     }
@@ -287,6 +282,7 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setToMinute( Double.parseDouble(diaMinute2.getText().toString()));
         toSend.setIsWindow(switchWindow.isChecked());
         toSend.setActive(switchActive.isChecked());
+        toSend.setDayOfWeek();
 
         HashSet<String> tempString = new HashSet<>();
         Object selected = null;
@@ -315,8 +311,9 @@ public class AlarmSend extends AppCompatActivity {
 
        timeFrom = sentData.getDoubleArray("timeFrom");
        timeTo = sentData.getDoubleArray("timeTo");
-       weekDayChecks =  sentData.getBooleanArray("weekDay");
+       weekDayChecks =  sentData.getString("weekDay");
        alarmId = sentData.getInt("alarmId");
+
     }
 
     public Set<Double> weekConvert(boolean[] boolList)

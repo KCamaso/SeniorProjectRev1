@@ -131,7 +131,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int fromHour = (alarm.getToHour().intValue());
                 int fromMinute = alarm.getToMinute().intValue();
 
-                Set<Double> week = alarm.getDayOfWeek();
+                String week = alarm.getDayOfWeek();
                 Set<String> meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
@@ -148,7 +148,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int toHour = alarm.getToHour().intValue();
                 int toMinute = alarm.getToHour().intValue();
 
-                Set<Double> week = alarm.getDayOfWeek();
+                String week = alarm.getDayOfWeek();
                 Set<String> meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
@@ -182,6 +182,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 sendData.putDoubleArray("timeTo", bundleTimeTo);
                 sendData.putBooleanArray("weekDay", checkBoxBoolean);
                 sendData.putDouble("alarmId", alarm.getTimerId());
+                sendData.putBooleanArray("weekToConvert", checkBoxBoolean);
 
                 Intent sendAlarm = new Intent(v.getContext(), AlarmSend.class);
                 sendAlarm.putExtras(sendData);
@@ -196,23 +197,20 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
     }
 
-    public void weekCheck( Set<Double> days)
+    public void weekCheck(String days)
     {
-        Iterator<Double> daysIterator = days.iterator();
-        int w = 0;
-        while (daysIterator.hasNext())
+        for(int i = 0; i < 7; i++)
         {
-                Double number = daysIterator.next();
-                if(number.intValue() == 1.0 )
-                {
-                    checkBoxes[w].setChecked(true);
-                }
-                else
-                {
-                    checkBoxes[w].setChecked(false);
-                }
-                w++;
+            if(days.charAt(i) == 0)
+            {
+                checkBoxes[i].setChecked(false);
+            }
+            else
+            {
+                checkBoxes[i].setChecked(true);
+            }
         }
+
     }
 
     public void medList(ViewHolder viewHolder, Set<String> meds)
