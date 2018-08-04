@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -45,8 +46,10 @@ public class AlarmSend extends AppCompatActivity {
 
     private double[] timeFrom;
     private double[] timeTo;
-    private String weekDayChecks;
-    private int alarmId;
+    private boolean[] weekDayChecks;
+    private double alarmId;
+    private boolean active;
+    private boolean isWindow;
 
     public EditText diaMinute;
     public EditText diaHour;
@@ -56,12 +59,14 @@ public class AlarmSend extends AppCompatActivity {
     public Switch switchWindow;
     public Switch switchActive;
     public Spinner medSpinner;
+    public Button deleteButton;
 
 
     public TimerDO timerItem = new TimerDO();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = this.getIntent().getExtras();
         setContentView(R.layout.activity_alarm_send);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alarm);
         setSupportActionBar(toolbar);
@@ -76,67 +81,41 @@ public class AlarmSend extends AppCompatActivity {
         diaHour2 = findViewById(R.id.diaHour2);
         weekBox = new CheckBox[] {findViewById(R.id.checkBoxDiaSu), findViewById(R.id.checkBoxDiaM), findViewById(R.id.checkBoxDiaTu),findViewById(R.id.checkBoxDiaW),findViewById(R.id.checkBoxDiaTh),findViewById(R.id.checkBoxDiaF),findViewById(R.id.checkBoxDiaSa)};
         switchWindow = findViewById(R.id.switchWindow);
-        switchActive = findViewById(R.id.switchActive);
+        switchActive = findViewById(R.id.switchActive1);
         medSpinner = findViewById(R.id.medSpinner);
+        deleteButton = findViewById(R.id.buttonDiaDeleteAlarm);
 
         // Setup Medication List here TODO
         //medSpinner.setAdapter();
         Log.e("AlarmActivity", "USER ID IS"+ USER_ID);
 
 
-        if(! (savedInstanceState == null)) {
+        if(!(extras == null)) {
             // Editing, update the item.
-            unpack(savedInstanceState);
+            Log.e("MyAlarmActivity", "SAVED INSTANCE ISN'T NULL");
+            unpack(extras);
+            Log.e("MyAlarmActivity", "ALARM ID: " + alarmId);
+            Log.e("MyAlarmActivity", "FROM " + timeFrom[0] + ":" + timeFrom[1]);
+            Log.e("MyAlarmActivity", "FROM " + timeTo[0] + ":" + timeTo[1]);
             setupDynamoDB();
 
 
-
+            deleteButton.setVisibility(View.VISIBLE);
             // Setting the fields, they haven't made a final selection.
             timerItem.setUserId(USER_ID);
             timerItem.setTimerId(Double.valueOf(alarmId));
-
-            try
-            {
-                timerItem.setFromHour(timeFrom[0]);
-            }
-            catch (NullPointerException e)
-            {
-                Log.e("SendActivity","From Missing, leaving Empty");
-            }
-
-            try
-            {
-                timerItem.setFromMinute(timeFrom[1]);
-            }
-            catch (NullPointerException e)
-            {
-                Log.e("SendActivity","From Missing, leaving Empty");
-            }
-
-            try
-            {
-                timerItem.setToHour(timeTo[0]);
-            }
-            catch (NullPointerException e)
-            {
-                Log.e("SendActivity","To Hour Missing, leaving Empty");
-            }
-
-            try
-            {
-                timerItem.setToMinute(timeTo[1]);
-            }
-            catch (NullPointerException e)
-            {
-                Log.e("SendActivity","From Missing, leaving Empty");
-            }
+            timerItem.setFromHour(timeFrom[0]);
+            timerItem.setFromMinute(timeFrom[1]);
+            timerItem.setToHour(timeTo[0]);
+            timerItem.setToMinute(timeTo[1]);
+            timerItem.setActive(active);
+            timerItem.setIsWindow(isWindow);
 
 
 
 
 
-
-            timerItem.setDayOfWeek(weekDayChecks);
+            timerItem.setDayOfWeek( booleanToString(weekDayChecks) );
 
             setValues(timerItem);
 
@@ -173,6 +152,29 @@ public class AlarmSend extends AppCompatActivity {
                 }
             });
 
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    timerItem = getValues();
+                    new Thread((new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            dynamoDBMapper.delete(timerItem);
+
+                        }
+                    })).start();
+
+                    final AnalyticsEvent editEvent = pinpointManager.getAnalyticsClient().createEvent("DeleteAlarm")
+                            .withAttribute("AlarmId", timerItem.getTimerId().toString());
+
+                    pinpointManager.getAnalyticsClient().recordEvent(editEvent);
+                    Intent sendBack = new Intent(AlarmSend.this, MainActivity.class);
+                    startActivity(sendBack);
+                }
+            });
+
 
 
 
@@ -180,7 +182,11 @@ public class AlarmSend extends AppCompatActivity {
         else
         {
             //New item, make a new alarmId here
+
+            Log.e("MyAlarmActivity", "SAVED INSTANCE IS NULL");
+            Log.e("MyAlarmActivity", "ALARM ID: " + alarmId);
             setupDynamoDB();
+            deleteButton.setVisibility(View.GONE);
 
 
 
@@ -250,25 +256,13 @@ public class AlarmSend extends AppCompatActivity {
 
     public void setValues(TimerDO info)
     {
-        diaHour.setText( info.getFromHour().intValue());
-        diaMinute.setText(info.getFromMinute().intValue());
-        diaHour2.setText(info.getToHour().intValue());
-        diaMinute2.setText(info.getToMinute().intValue());
+        diaHour.setText( String.valueOf(info.getFromHour().intValue()));
+        diaMinute.setText(String.valueOf(info.getFromMinute().intValue()));
+        diaHour2.setText(String.valueOf(info.getToHour().intValue()));
+        diaMinute2.setText(String.valueOf(info.getToMinute().intValue()));
         switchActive.setChecked(info.getActive());
         switchWindow.setChecked(info.getIsWindow());
-
-
-        for(int i = 0; i < 7; i++)
-        {
-            if(info.getDayOfWeek().charAt(i) == 0)
-            {
-                weekBox[i].setChecked(false);
-            }
-            else
-            {
-                weekBox[i].setChecked(true);
-            }
-        }
+        stringToCheckbox(info.getDayOfWeek());
 
     }
 
@@ -283,7 +277,9 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setToMinute( Double.parseDouble(diaMinute2.getText().toString()));
         toSend.setIsWindow(switchWindow.isChecked());
         toSend.setActive(switchActive.isChecked());
-        toSend.setDayOfWeek( weekConstructor() );
+        toSend.setDayOfWeek( checkBoxToString() );
+        toSend.setTimerId(alarmId);
+
 
         HashSet<String> tempString = new HashSet<>();
         Object selected = null;
@@ -307,24 +303,54 @@ public class AlarmSend extends AppCompatActivity {
         return toSend;
     }
 
-    public String weekConstructor()
+    public String checkBoxToString()
     {
-        StringBuilder returnString = new StringBuilder();
+        StringBuilder temp = new StringBuilder();
+
         for(int i = 0; i < 7; i++)
         {
-            returnString.append(weekBox[i].isChecked() ? 1 : 0);
+            temp.append(weekBox[i].isChecked() ? "1" : "0");
         }
-        return returnString.toString();
+        return temp.toString();
     }
+
+    public void stringToCheckbox(String string)
+    {
+        for(int i = 0; i < 7; i++)
+        {
+            if(string.charAt(i) == '0')
+            {
+                weekBox[i].setChecked(false);
+            }
+            else
+            {
+                weekBox[i].setChecked(true);
+            }
+        }
+    }
+
+    public String booleanToString(boolean[] week)
+    {
+        StringBuilder temp = new StringBuilder();
+
+        for(int i = 0; i < 7; i++)
+        {
+            temp.append(week[i] ? "1" : "0");
+        }
+        return temp.toString();
+    }
+
 
     public void unpack(Bundle sentData)
     {
 
        timeFrom = sentData.getDoubleArray("timeFrom");
        timeTo = sentData.getDoubleArray("timeTo");
-       weekDayChecks =  sentData.getString("weekDay");
-       alarmId = sentData.getInt("alarmId");
-       weekDayChecks = sentData.getString("weekToConvert");
+       alarmId =  sentData.getDouble("alarmId");
+       weekDayChecks = sentData.getBooleanArray("weekToConvert");
+       active = sentData.getBoolean("active");
+       isWindow = sentData.getBoolean("isWindow");
+
 
     }
 

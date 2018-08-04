@@ -85,10 +85,10 @@ public class AlarmFrag extends Fragment {
     public static  DynamoDBMapper dynamoDBMapper;
 
     FloatingActionButton fab;
-    public ArrayList<TimerDO> adaptList = new ArrayList<>();
-   RecyclerView recycList;
-   RecyclerView.LayoutManager mLayoutManager;
-   RecyclerView.Adapter mAdapter;
+   public ArrayList<TimerDO> adaptList = new ArrayList<>();
+   public RecyclerView recycList;
+   public RecyclerView.LayoutManager mLayoutManager;
+   public RecyclerView.Adapter mAdapter;
 
 
 
@@ -243,6 +243,8 @@ public class AlarmFrag extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }
 
 

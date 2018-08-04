@@ -44,7 +44,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
         TextView alarmDate;
         TextView list;
         Switch activeSwitch;
-        Button moreButt;
+
         Button editButt;
         ConstraintLayout weekLayout;
 
@@ -58,30 +58,10 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             alarmDate = (TextView) itemView.findViewById(R.id.alarmDateView);
             list = (TextView) itemView.findViewById(R.id.alarm_dynamic);
             activeSwitch = (Switch) itemView.findViewById(R.id.alarmSwitch);
-            moreButt = (Button) itemView.findViewById(R.id.alarmDeleteButton);
+
             editButt = (Button) itemView.findViewById(R.id.alarmEditButton);
             weekLayout = (ConstraintLayout) itemView.findViewById(R.id.weekLayout);
             checkBoxes = new CheckBox[] {itemView.findViewById(R.id.checkBoxSu),itemView.findViewById(R.id.checkBoxM),itemView.findViewById(R.id.checkBoxTu),itemView.findViewById(R.id.checkBoxW),itemView.findViewById(R.id.checkBoxTh),itemView.findViewById(R.id.checkBoxF),itemView.findViewById(R.id.checkBoxSa)};
-
-            moreButt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ObjectAnimator anime1 = ObjectAnimator.ofInt(weekLayout, "maxHeight", weekLayout.getMaxHeight());
-                    if( weekLayout.getVisibility() == View.GONE)
-                    {
-                        weekLayout.setVisibility(View.VISIBLE);
-                    }
-                    else
-                    {
-                        weekLayout.setVisibility(View.GONE);
-                    }
-                    anime1.setDuration(200).start();
-                }
-
-            });
-
-
-
 
         }
 
@@ -184,12 +164,16 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 sendData.putBooleanArray("weekDay", checkBoxBoolean);
                 sendData.putDouble("alarmId", alarm.getTimerId());
                 sendData.putBooleanArray("weekToConvert", checkBoxBoolean);
+                sendData.putBoolean("active", alarm.getActive());
+                sendData.putBoolean("isWindow", alarm.getIsWindow());
 
                 Intent sendAlarm = new Intent(v.getContext(), AlarmSend.class);
                 sendAlarm.putExtras(sendData);
                 v.getContext().startActivity(sendAlarm);
             }
         });
+
+
 
     }
 
