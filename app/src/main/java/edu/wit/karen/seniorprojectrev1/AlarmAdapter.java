@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +137,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 weekCheck(week);
-                medList(viewHolder, meds);
+              //  medList(viewHolder, meds);
                 viewHolder.alarmDate.setVisibility(View.VISIBLE);
 
 
@@ -146,7 +147,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int fromHour = alarm.getFromHour().intValue();
                 int fromMinute = alarm.getFromMinute().intValue();
                 int toHour = alarm.getToHour().intValue();
-                int toMinute = alarm.getToHour().intValue();
+                int toMinute = alarm.getToMinute().intValue();
 
                 String week = alarm.getDayOfWeek();
                 Set<String> meds = alarm.getMedName();
@@ -154,7 +155,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 viewHolder.alarmDate.setText(toHour + ":" + toMinute);
                 weekCheck(week);
-                medList(viewHolder, meds);
+             //   medList(viewHolder, meds);
 
             }
             if(active)
@@ -187,11 +188,6 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 Intent sendAlarm = new Intent(v.getContext(), AlarmSend.class);
                 sendAlarm.putExtras(sendData);
                 v.getContext().startActivity(sendAlarm);
-
-
-
-
-
             }
         });
 
@@ -201,13 +197,16 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     {
         for(int i = 0; i < 7; i++)
         {
-            if(days.charAt(i) == 0)
+            char[] dayArray = days.toCharArray();
+            if(dayArray[i] == '0')
             {
                 checkBoxes[i].setChecked(false);
+                Log.i("MyAlarmInfo", dayArray[i] + " Therefore FALSE");
             }
             else
             {
                 checkBoxes[i].setChecked(true);
+                Log.i("MyAlarmInfo", dayArray[i] + " Therefore True");
             }
         }
 
@@ -215,9 +214,14 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
     public void medList(ViewHolder viewHolder, Set<String> meds)
     {
-        Iterator<String> medSimple = meds.iterator();
-        String medName = medSimple.next();
-        viewHolder.list.setText(medName);
+        if(meds.size() !=0 || meds != null)
+
+        {
+            Iterator<String> medSimple = meds.iterator();
+            String medName = medSimple.next();
+            viewHolder.list.setText(medName);
+        }
+
     }
 
     @Override

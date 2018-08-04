@@ -257,6 +257,7 @@ public class AlarmSend extends AppCompatActivity {
         switchActive.setChecked(info.getActive());
         switchWindow.setChecked(info.getIsWindow());
 
+
         for(int i = 0; i < 7; i++)
         {
             if(info.getDayOfWeek().charAt(i) == 0)
@@ -282,7 +283,7 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setToMinute( Double.parseDouble(diaMinute2.getText().toString()));
         toSend.setIsWindow(switchWindow.isChecked());
         toSend.setActive(switchActive.isChecked());
-        toSend.setDayOfWeek();
+        toSend.setDayOfWeek( weekConstructor() );
 
         HashSet<String> tempString = new HashSet<>();
         Object selected = null;
@@ -306,6 +307,16 @@ public class AlarmSend extends AppCompatActivity {
         return toSend;
     }
 
+    public String weekConstructor()
+    {
+        StringBuilder returnString = new StringBuilder();
+        for(int i = 0; i < 7; i++)
+        {
+            returnString.append(weekBox[i].isChecked() ? 1 : 0);
+        }
+        return returnString.toString();
+    }
+
     public void unpack(Bundle sentData)
     {
 
@@ -313,28 +324,10 @@ public class AlarmSend extends AppCompatActivity {
        timeTo = sentData.getDoubleArray("timeTo");
        weekDayChecks =  sentData.getString("weekDay");
        alarmId = sentData.getInt("alarmId");
+       weekDayChecks = sentData.getString("weekToConvert");
 
     }
 
-    public Set<Double> weekConvert(boolean[] boolList)
-    {
-      Set<Double> doubList = new HashSet<Double>();
-
-      for(int i = boolList.length; 0 < boolList.length; i--)
-      {
-          if (boolList[i])
-          {
-              doubList.add(1.0d);
-          }
-          else
-          {
-              doubList.add(0.0d);
-          }
-
-      }
-
-      return doubList;
-    }
 
     private void setupDynamoDB()
     {
