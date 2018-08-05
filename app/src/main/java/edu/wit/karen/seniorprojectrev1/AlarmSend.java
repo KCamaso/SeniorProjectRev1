@@ -93,7 +93,7 @@ public class AlarmSend extends AppCompatActivity {
 
         // Setup Medication List here TODO
         //medSpinner.setAdapter();
-        Log.e("AlarmActivity", "USER ID IS"+ USER_ID);
+        Log.e("AlarmActivity", "USER ID IN ALARM SEND IS"+ USER_ID);
 
 
         if(!(extras == null)) {
@@ -131,9 +131,15 @@ public class AlarmSend extends AppCompatActivity {
                         Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + medList.size());
                     }
 
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    medSpinner.setAdapter(adapter);
+                    try {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        medSpinner.setAdapter(adapter);
+                    }
+                    catch(NullPointerException e)
+                    {
+                        // Lol, nothing happens here too
+                    }
                 }
             }).execute();
 
@@ -205,6 +211,28 @@ public class AlarmSend extends AppCompatActivity {
             Log.e("MyAlarmActivity", "ALARM ID: " + alarmId);
             setupDynamoDB();
             deleteButton.setVisibility(View.GONE);
+
+            new MedicationAsync(new OnTaskCompletedMeds() {
+                @Override
+                public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
+                    for(MedicationDO meds : MedDOS)
+                    {
+                        medList.add(meds.getName());
+                        Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + medList.size());
+                    }
+
+                    try {
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        medSpinner.setAdapter(adapter);
+                    }
+                    catch(NullPointerException e)
+                    {
+                        // Lol nothing happens
+                    }
+
+                }
+            }).execute();
 
 
 

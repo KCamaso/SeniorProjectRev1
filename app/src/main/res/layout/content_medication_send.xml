@@ -21,7 +21,6 @@
             android:ems="10"
             android:hint="Medication Name"
             android:inputType="textPersonName"
-            android:text="Name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
