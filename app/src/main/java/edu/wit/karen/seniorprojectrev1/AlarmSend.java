@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,14 +26,18 @@ import com.amazonaws.mobile.auth.core.IdentityManager;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointConfiguration;
 import com.amazonaws.mobileconnectors.pinpoint.PinpointManager;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class AlarmSend extends AppCompatActivity {
@@ -50,6 +55,7 @@ public class AlarmSend extends AppCompatActivity {
     private double alarmId;
     private boolean active;
     private boolean isWindow;
+    private List<String> medList = new ArrayList<String>();
 
     public EditText diaMinute;
     public EditText diaHour;
@@ -112,12 +118,24 @@ public class AlarmSend extends AppCompatActivity {
             timerItem.setIsWindow(isWindow);
 
 
-
-
-
             timerItem.setDayOfWeek( booleanToString(weekDayChecks) );
 
             setValues(timerItem);
+
+            new MedicationAsync(new OnTaskCompletedMeds() {
+                @Override
+                public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
+                    for(MedicationDO meds : MedDOS)
+                    {
+                        medList.add(meds.getName());
+                        Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + medList.size());
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    medSpinner.setAdapter(adapter);
+                }
+            }).execute();
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -384,7 +402,5 @@ public class AlarmSend extends AppCompatActivity {
         pinpointManager.getSessionClient().stopSession();
         pinpointManager.getAnalyticsClient().submitEvents();
     }
-
-
 
 }

@@ -52,19 +52,13 @@ public class MedicationSend extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = this.getIntent().getExtras();
         setContentView(R.layout.activity_medication_send);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_med);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Medication Creation");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         diaMedName = findViewById(R.id.diaMedName);
@@ -76,18 +70,29 @@ public class MedicationSend extends AppCompatActivity {
         diaMedNotify = findViewById(R.id.diaMedNotify);
 
 
-        if(!(savedInstanceState == null))
+        if(!(extras == null))
         { // Editing, update the item.
-            unpack(savedInstanceState);
+            unpack(extras);
             setupDynamoDB();
 
             medItem.setUserId(USER_ID);
             medItem.setMedId(Double.valueOf(medId));
             setValues(medItem);
+
+
         }
         else
         {
+            setupDynamoDB();
 
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
         }
     }
 

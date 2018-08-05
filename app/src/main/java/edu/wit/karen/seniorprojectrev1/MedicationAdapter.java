@@ -29,8 +29,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
         Button buttonEdit;
         Button buttonRefill;
         EditText number;
-        Button buttonPlus;
-        Button buttonMinus;
+
 
 
 
@@ -41,10 +40,9 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             nameText = itemView.findViewById(R.id.timeText);
             descView = itemView.findViewById(R.id.descView);
             buttonEdit = itemView.findViewById(R.id.buttonMedEdit);
-            buttonRefill = itemView.findViewById(R.id.buttonRefill);
+
             number = itemView.findViewById(R.id.numberText);
-            buttonPlus = itemView.findViewById(R.id.buttonPlus);
-            buttonMinus = itemView.findViewById(R.id.buttonMinus);
+
 
         }
     }

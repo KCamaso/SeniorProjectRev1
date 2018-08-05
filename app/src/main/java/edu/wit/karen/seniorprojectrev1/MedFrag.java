@@ -3,11 +3,13 @@ package edu.wit.karen.seniorprojectrev1;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +19,15 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 
 import java.util.ArrayList;
+
+import static edu.wit.karen.seniorprojectrev1.AlarmSend.USER_ID;
 
 
 /**
@@ -44,7 +50,10 @@ public class MedFrag extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    public DynamoDBMapper dynamoDBMapper;
+    public static DynamoDBMapper dynamoDBMapper;
+    public ArrayList<MedicationDO> adaptList = new ArrayList<>();
+    public RecyclerView.LayoutManager mLayoutManager;
+    public RecyclerView recycList;
 
     FloatingActionButton fab;
 
@@ -89,11 +98,29 @@ public class MedFrag extends Fragment {
             container.clearDisappearingChildren();
         }
 
-        View view = inflater.inflate(R.layout.med_main, container, false);
+        final View view = inflater.inflate(R.layout.med_main, container, false);
         //Setup DynamoDB
         setupDynamoDB();
 
-        fab = view.findViewById(R.id.fab_med);
+        new MedicationAsync(new OnTaskCompletedMeds() {
+            @Override
+            public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
+                for(MedicationDO meds : MedDOS)
+                {
+                    adaptList.add(meds);
+                    Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + adaptList.size());
+                }
+               recycList = view.findViewById(R.id.medRecycler);
+               mLayoutManager = new LinearLayoutManager(getContext());
+               recycList.setLayoutManager(mLayoutManager);
+               RecyclerView.Adapter mAdapter = new MedicationAdapter(adaptList);
+               recycList.setAdapter(mAdapter);
+               mAdapter.notifyDataSetChanged();
+
+            }
+        }).execute();
+
+                fab = view.findViewById(R.id.fab_med);
 
         if (fab != null)
         {
@@ -108,20 +135,7 @@ public class MedFrag extends Fragment {
                 }
             });
         }
-        /*
-        MedObj med1 = new MedObj("Medication 1", 30, false, "Test 1");
-        ArrayList<MedObj> list1 = new ArrayList<>();
-        RecyclerView recycList = view.findViewById(R.id.medRecycler);
-        list1.add(med1);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
-        recycList.setLayoutManager(mLayoutManager);
-
-        RecyclerView.Adapter mAdapter = new MedicationAdapter(list1);
-
-        recycList.setAdapter(mAdapter);
-
-*/
         return view;
     }
 
@@ -149,8 +163,6 @@ public class MedFrag extends Fragment {
 
 
 
-
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -172,3 +184,61 @@ public class MedFrag extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 }
+
+class MedicationAsync extends AsyncTask<Void, Void, ArrayList<MedicationDO>>
+{
+    private OnTaskCompletedMeds listener;
+    public MedicationAsync(OnTaskCompletedMeds listener)
+    {
+        this.listener = listener;
+    }
+    @Override
+    protected void onPreExecute()
+    {
+
+    }
+    @Override
+    protected ArrayList<MedicationDO> doInBackground(Void... voids) {
+        ArrayList<MedicationDO> returnList = new ArrayList<>();
+
+       MedicationDO template = new MedicationDO();
+       template.setUserId(USER_ID);
+
+
+        DynamoDBScanExpression queryExpression;
+        queryExpression = new DynamoDBScanExpression();
+
+
+        PaginatedScanList<MedicationDO> medicationList = MedFrag.dynamoDBMapper.scan(MedicationDO.class, queryExpression);
+
+        for(MedicationDO meds: medicationList)
+        {
+            returnList.add(meds);
+            Log.e("MyAlarmActivity","Timer ID: " + meds.getMedId() + " ArraySize: " + returnList.size());
+
+
+        }
+
+        return returnList;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<MedicationDO> medicationDOS) {
+        ArrayList<MedicationDO> temp = new ArrayList<>();
+        for(MedicationDO meds: medicationDOS)
+        {
+            temp.add(meds);
+            Log.e("MyAlarmActivity","Timer ID: " + meds.getMedId().toString() + " ArraySize: " + temp.size());
+        }
+        listener.onTaskCompleted(temp);
+        super.onPostExecute(temp);
+
+    }
+}
+
+interface OnTaskCompletedMeds
+{
+    void onTaskCompleted(ArrayList<MedicationDO> MedDOS);
+}
+
+
