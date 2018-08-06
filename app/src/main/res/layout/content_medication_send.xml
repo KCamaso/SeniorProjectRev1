@@ -8,95 +8,175 @@
     tools:context=".MedicationSend"
     tools:showIn="@layout/activity_medication_send">
 
-    <android.support.constraint.ConstraintLayout
+    <Button
+        android:id="@+id/buttonDiaDeleteMedication"
+        style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Delete Medication"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/DeleteDia" />
 
-        <EditText
-            android:id="@+id/diaMedName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Medication Name"
-            android:inputType="textPersonName"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/medSendFab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_menu_medication" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/diaCardMedication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:animateLayoutChanges="true"
+        android:minHeight="200dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/diaMedName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="Medication Name"
+                    android:inputType="textPersonName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/diaMedDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="Description"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diaMedCurrent" />
+
+                <EditText
+                    android:id="@+id/diaMedCurrent"
+                    android:layout_width="134dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="# Of Dosages"
+                    android:inputType="number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/infiniteDoseCheck" />
+
+                <EditText
+                    android:id="@+id/diaMedMax"
+                    android:layout_width="63dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="Total"
+                    android:inputType="number"
+                    app:layout_constraintBottom_toBottomOf="@+id/diaMedCurrent"
+                    app:layout_constraintStart_toEndOf="@+id/diaMedCurrent"
+                    app:layout_constraintTop_toTopOf="@+id/diaMedCurrent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <Switch
+                    android:id="@+id/infiniteDoseCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:switchPadding="5dp"
+                    android:text="@string/infDoseBox"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diaMedName" />
+
+                <Switch
+                    android:id="@+id/diaMedNotifySwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:switchPadding="5dp"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diaMedDesc"
+                    tools:text="@string/medNotify" />
+
+                <EditText
+                    android:id="@+id/diaMedNotify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    android:hint="Notification Number"
+                    android:inputType="number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/diaMedNotifySwitch" />
+
+                <Button
+                    android:id="@+id/button2"
+                    style="@android:style/Widget.Material.Button.Borderless.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Refill"
+                    app:layout_constraintBottom_toBottomOf="@+id/diaMedMax"
+                    app:layout_constraintStart_toEndOf="@+id/diaMedMax"
+                    app:layout_constraintTop_toTopOf="@+id/diaMedMax" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/helloSide2"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="356dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:srcCompat="@android:color/holo_orange_dark"
+            tools:layout_editor_absoluteY="0dp" />
 
-        <EditText
-            android:id="@+id/diaMedDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Description"
-            android:inputType="textMultiLine"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/diaMedCurrent" />
+    </android.support.v7.widget.CardView>
 
-        <EditText
-            android:id="@+id/diaMedCurrent"
-            android:layout_width="134dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="# Of Dosages"
-            android:inputType="number"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/infiniteDoseCheck" />
-
-        <EditText
-            android:id="@+id/diaMedMax"
-            android:layout_width="63dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Total"
-            android:inputType="number"
-            app:layout_constraintBottom_toBottomOf="@+id/diaMedCurrent"
-            app:layout_constraintStart_toEndOf="@+id/diaMedCurrent"
-            app:layout_constraintTop_toTopOf="@+id/diaMedCurrent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <Switch
-            android:id="@+id/infiniteDoseCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:switchPadding="5dp"
-            android:text="@string/infDoseBox"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/diaMedName" />
-
-        <Switch
-            android:id="@+id/diaMedNotifySwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:switchPadding="5dp"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/diaMedDesc"
-            tools:text="@string/medNotify" />
-
-        <EditText
-            android:id="@+id/diaMedNotify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:hint="Notification Number"
-            android:inputType="number"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/diaMedNotifySwitch" />
-
-    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

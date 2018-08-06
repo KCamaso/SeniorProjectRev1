@@ -20,6 +20,7 @@ import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobile.config.AWSConfiguration;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedList;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsClient;
 import com.amazonaws.mobileconnectors.pinpoint.analytics.AnalyticsEvent;
@@ -54,6 +55,7 @@ public class MedFrag extends Fragment {
     public ArrayList<MedicationDO> adaptList = new ArrayList<>();
     public RecyclerView.LayoutManager mLayoutManager;
     public RecyclerView recycList;
+    public RecyclerView.Adapter mAdapter;
 
     FloatingActionButton fab;
 
@@ -105,15 +107,16 @@ public class MedFrag extends Fragment {
         new MedicationAsync(new OnTaskCompletedMeds() {
             @Override
             public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
+                recycList = view.findViewById(R.id.medRecycler);
                 for(MedicationDO meds : MedDOS)
                 {
                     adaptList.add(meds);
-                    Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + adaptList.size());
+                    Log.e("MyMedActivity", "ADAPT LIST SIZE: " + adaptList.size());
                 }
-               recycList = view.findViewById(R.id.medRecycler);
+
                mLayoutManager = new LinearLayoutManager(getContext());
                recycList.setLayoutManager(mLayoutManager);
-               RecyclerView.Adapter mAdapter = new MedicationAdapter(adaptList);
+               mAdapter = new MedicationAdapter(adaptList);
                recycList.setAdapter(mAdapter);
                mAdapter.notifyDataSetChanged();
 
@@ -130,7 +133,6 @@ public class MedFrag extends Fragment {
                 public void onClick(View view)
                 {
                     Intent sendToMedication = new Intent(getContext(), MedicationSend.class);
-
                     startActivity(sendToMedication);
                 }
             });
@@ -207,16 +209,14 @@ class MedicationAsync extends AsyncTask<Void, Void, ArrayList<MedicationDO>>
 
         DynamoDBScanExpression queryExpression;
         queryExpression = new DynamoDBScanExpression();
+        PaginatedList<MedicationDO> medicationList;
 
 
-        PaginatedScanList<MedicationDO> medicationList = MedFrag.dynamoDBMapper.scan(MedicationDO.class, queryExpression);
+        medicationList = MedFrag.dynamoDBMapper.scan(MedicationDO.class, queryExpression);
 
         for(MedicationDO meds: medicationList)
         {
             returnList.add(meds);
-            Log.e("MyAlarmActivity","Timer ID: " + meds.getMedId() + " ArraySize: " + returnList.size());
-
-
         }
 
         return returnList;
@@ -228,7 +228,7 @@ class MedicationAsync extends AsyncTask<Void, Void, ArrayList<MedicationDO>>
         for(MedicationDO meds: medicationDOS)
         {
             temp.add(meds);
-            Log.e("MyAlarmActivity","Timer ID: " + meds.getMedId().toString() + " ArraySize: " + temp.size());
+            Log.e("MyAlarmActivity","Med ID: " + meds.getMedId().toString() + " ArraySize: " + temp.size());
         }
         listener.onTaskCompleted(temp);
         super.onPostExecute(temp);

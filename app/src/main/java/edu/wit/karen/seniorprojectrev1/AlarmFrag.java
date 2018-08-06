@@ -138,7 +138,7 @@ public class AlarmFrag extends Fragment {
         final View view = inflater.inflate(R.layout.alarm_main, container, false);
         fab = view.findViewById(R.id.fab_alarm);
 
-        Log.e("MyMainApplication", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
+        Log.e("MyAlarmActivity", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
 
         setupDynamoDB();
 

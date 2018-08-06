@@ -104,6 +104,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     public void onBindViewHolder(final ViewHolder viewHolder, int i)
     {
 
+            viewHolder.list.setText(mAlarms.get(i).getMedName());
             final TimerDO alarm = mAlarms.get(i);
             boolean active = alarm.getActive();
 
@@ -113,11 +114,11 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int fromMinute = alarm.getToMinute().intValue();
 
                 String week = alarm.getDayOfWeek();
-                Set<String> meds = alarm.getMedName();
+                String meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 weekCheck(week);
-              //  medList(viewHolder, meds);
+                viewHolder.list.setText("Medications to take: " + "\n" + meds);
                 viewHolder.alarmDate.setVisibility(View.VISIBLE);
 
 
@@ -130,12 +131,12 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
                 int toMinute = alarm.getToMinute().intValue();
 
                 String week = alarm.getDayOfWeek();
-                Set<String> meds = alarm.getMedName();
+                String meds = alarm.getMedName();
 
                 viewHolder.alarmTime.setText(fromHour + ":" + fromMinute);
                 viewHolder.alarmDate.setText(toHour + ":" + toMinute);
                 weekCheck(week);
-             //   medList(viewHolder, meds);
+                viewHolder.list.setText("Medications to take: " + "\n" + meds);
 
             }
             if(active)
@@ -196,17 +197,6 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
 
     }
 
-    public void medList(ViewHolder viewHolder, Set<String> meds)
-    {
-        if(meds.size() !=0 || meds != null)
-
-        {
-            Iterator<String> medSimple = meds.iterator();
-            String medName = medSimple.next();
-            viewHolder.list.setText(medName);
-        }
-
-    }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView)

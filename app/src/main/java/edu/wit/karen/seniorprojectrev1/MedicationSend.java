@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
 
@@ -30,10 +31,7 @@ public class MedicationSend extends AppCompatActivity {
 
     public static PinpointManager pinpointManager;
     public  static DynamoDBMapper dynamoDBMapper;
-    public static CognitoCachingCredentialsProvider cogCredentialsProvider;
-    public static IdentityManager identityManager;
     public static String USER_ID = MainActivity.userId;
-    private static Context context;
 
     EditText diaMedName;
     EditText diaMedDesc;
@@ -42,6 +40,9 @@ public class MedicationSend extends AppCompatActivity {
     Switch infiniteDoseCheck;
     Switch diaMedNotifySwitch;
     EditText diaMedNotify;
+    FloatingActionButton fab;
+    Button deleteButton;
+
 
     private String userId;
     private String currentNum;
@@ -73,6 +74,9 @@ public class MedicationSend extends AppCompatActivity {
         infiniteDoseCheck = findViewById(R.id.infiniteDoseCheck);
         diaMedNotifySwitch = findViewById(R.id.diaMedNotifySwitch);
         diaMedNotify = findViewById(R.id.diaMedNotify);
+        fab =  findViewById(R.id.medSendFab2);
+        deleteButton = findViewById(R.id.buttonDiaDeleteMedication);
+
         Log.e("MedicationActivity", "USER ID IN MEDICATION SEND IS"+ USER_ID);
 
 
@@ -80,9 +84,8 @@ public class MedicationSend extends AppCompatActivity {
         { // Editing, update the item.
             unpack(extras);
 
-
+            deleteButton.setVisibility(View.VISIBLE);
             medItem.setUserId(USER_ID);
-            medItem.setMedId(Double.valueOf(medId));
             medItem.setCurrentNum(currentNum);
             medItem.setInfinite(infinite);
             medItem.setInfo(info);
@@ -90,15 +93,15 @@ public class MedicationSend extends AppCompatActivity {
             medItem.setName(name);
             medItem.setNotify(notify);
             medItem.setNotifyNum(notifyNum);
+            medItem.setMedId(Double.valueOf(medId));
 
             setValues(medItem);
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.medSendFab);
+
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     medItem = getValues();
-                    medItem.setMedId(medId);
                     if(!medItem.getName().isEmpty())
                     {
                         if (valueCheck(medItem))
@@ -136,18 +139,37 @@ public class MedicationSend extends AppCompatActivity {
 
                 }
             });
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    medItem = getValues();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dynamoDBMapper.delete(medItem);
+                        }
+                    }).start();
+                }
+            });
+
+            final AnalyticsEvent editEvent = pinpointManager.getAnalyticsClient().createEvent("DeleteMedication")
+                    .withAttribute("MedId", medItem.getMedId().toString());
+
+            pinpointManager.getAnalyticsClient().recordEvent(editEvent);
+            Intent sendBack = new Intent(MedicationSend.this, MainActivity.class);
+            startActivity(sendBack);
         }
         else
         {
             // No preveious info, new Medication
-
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.medSendFab);
+            deleteButton.setVisibility(View.GONE);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     medItem = getValues();
                     medItem.setMedId((Double.parseDouble(new Long(Calendar.getInstance().getTimeInMillis()).toString())));
-                    if (medItem.getName().isEmpty())
+                    if (!medItem.getName().isEmpty())
                     {
                         if (valueCheck(medItem))
                         {
@@ -208,10 +230,16 @@ public class MedicationSend extends AppCompatActivity {
     public boolean valueCheck(MedicationDO checkable)
     {
         boolean flag = true;
-        int currentNum = Integer.parseInt(checkable.getCurrentNum());
-        int notifyNumb = Integer.parseInt(checkable.getNotifyNum());
-        int maxNum = Integer.parseInt(checkable.getMaxNum());
-        if( currentNum > maxNum || notifyNumb > maxNum || maxNum == 0 || notifyNumb == 0)
+        try{
+            int currentNum = Integer.parseInt(checkable.getCurrentNum());
+            int notifyNumb = Integer.parseInt(checkable.getNotifyNum());
+            int maxNum = Integer.parseInt(checkable.getMaxNum());
+            if( currentNum > maxNum || notifyNumb > maxNum || maxNum == 0 || notifyNumb == 0)
+            {
+                flag = false;
+            }
+
+        }catch(Exception e)
         {
             flag = false;
         }

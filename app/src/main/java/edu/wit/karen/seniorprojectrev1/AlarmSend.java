@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -40,14 +41,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static edu.wit.karen.seniorprojectrev1.AlarmSend.USER_ID;
+
 public class AlarmSend extends AppCompatActivity {
 
     public static PinpointManager pinpointManager;
     public  static DynamoDBMapper dynamoDBMapper;
-    public static CognitoCachingCredentialsProvider cogCredentialsProvider;
-    public static IdentityManager identityManager;
     public static String USER_ID = MainActivity.userId;
-    private static Context context;
+
 
     private double[] timeFrom;
     private double[] timeTo;
@@ -56,6 +57,7 @@ public class AlarmSend extends AppCompatActivity {
     private boolean active;
     private boolean isWindow;
     private List<String> medList = new ArrayList<String>();
+    private ArrayAdapter<String> adapter;
 
     public EditText diaMinute;
     public EditText diaHour;
@@ -74,10 +76,10 @@ public class AlarmSend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = this.getIntent().getExtras();
         setContentView(R.layout.activity_alarm_send);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alarm);
+        Toolbar toolbar = findViewById(R.id.toolbar_alarm);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab =  findViewById(R.id.fab);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -122,24 +124,16 @@ public class AlarmSend extends AppCompatActivity {
 
             setValues(timerItem);
 
-            new MedicationAsync(new OnTaskCompletedMeds() {
+            new MedNameAsync(new OnTaskCompletedMedNames() {
                 @Override
-                public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
-                    for(MedicationDO meds : MedDOS)
+                public void onTaskCompleted(ArrayList<MedicationDO> medicationDOS) {
+                    for(MedicationDO med : medicationDOS)
                     {
-                        medList.add(meds.getName());
-                        Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + medList.size());
+                        medList.add(med.getName());
                     }
-
-                    try {
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        medSpinner.setAdapter(adapter);
-                    }
-                    catch(NullPointerException e)
-                    {
-                        // Lol, nothing happens here too
-                    }
+                    adapter = new ArrayAdapter<String>(AlarmSend.this, android.R.layout.simple_spinner_item,medList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    medSpinner.setAdapter(adapter);
                 }
             }).execute();
 
@@ -149,6 +143,7 @@ public class AlarmSend extends AppCompatActivity {
                     timerItem = getValues();
                     if (valueCheck(timerItem))
                     {
+                        timerItem.setMedName(medSpinner.getSelectedItem().toString());
                         // Content Checked, passed, updating
                         new Thread((new Runnable()
                         {
@@ -212,7 +207,7 @@ public class AlarmSend extends AppCompatActivity {
             setupDynamoDB();
             deleteButton.setVisibility(View.GONE);
 
-            new MedicationAsync(new OnTaskCompletedMeds() {
+            new MedNameAsync(new OnTaskCompletedMedNames() {
                 @Override
                 public void onTaskCompleted(ArrayList<MedicationDO> MedDOS) {
                     for(MedicationDO meds : MedDOS)
@@ -221,15 +216,10 @@ public class AlarmSend extends AppCompatActivity {
                         Log.e("MyAlarmActivity", "ADAPT LIST SIZE: " + medList.size());
                     }
 
-                    try {
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(AlarmSend.context, android.R.layout.simple_spinner_item);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        medSpinner.setAdapter(adapter);
-                    }
-                    catch(NullPointerException e)
-                    {
-                        // Lol nothing happens
-                    }
+                    adapter = new ArrayAdapter<String>(AlarmSend.this, android.R.layout.simple_spinner_item,medList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    medSpinner.setAdapter(adapter);
+
 
                 }
             }).execute();
@@ -245,6 +235,7 @@ public class AlarmSend extends AppCompatActivity {
                     timerItem.setTimerId(Double.parseDouble(new Long(Calendar.getInstance().getTimeInMillis()).toString()));
                     if (valueCheck(timerItem))
                     {
+                        timerItem.setMedName(medSpinner.getSelectedItem().toString());
                         // Content Checked, passed, updating
                         new Thread((new Runnable()
                         {
@@ -325,23 +316,7 @@ public class AlarmSend extends AppCompatActivity {
         toSend.setActive(switchActive.isChecked());
         toSend.setDayOfWeek( checkBoxToString() );
         toSend.setTimerId(alarmId);
-
-
-        HashSet<String> tempString = new HashSet<>();
-        Object selected = null;
-
-        try{
-            medSpinner.getSelectedItem();
-        }
-        catch(NullPointerException e)
-        {
-
-        }
-        if(selected != null)
-        {
-            tempString.add(medSpinner.getSelectedItem().toString());
-            toSend.setMedName(tempString);
-        }
+        toSend.setMedName(medSpinner.getSelectedItem().toString());
 
 
 
@@ -431,4 +406,60 @@ public class AlarmSend extends AppCompatActivity {
         pinpointManager.getAnalyticsClient().submitEvents();
     }
 
+}
+
+class MedNameAsync extends AsyncTask<Void, Void, ArrayList<MedicationDO>>
+{
+    private OnTaskCompletedMedNames listener;
+    public MedNameAsync(OnTaskCompletedMedNames listener)
+    {
+        this.listener = listener;
+    }
+    @Override
+    protected void onPreExecute()
+    {
+
+    }
+    @Override
+    protected ArrayList<MedicationDO> doInBackground(Void... voids) {
+        ArrayList<MedicationDO> returnList = new ArrayList<>();
+
+        MedicationDO template = new MedicationDO();
+        template.setUserId(USER_ID);
+
+
+        DynamoDBScanExpression queryExpression;
+        queryExpression = new DynamoDBScanExpression();
+
+
+        PaginatedScanList<MedicationDO> medNameList = AlarmFrag.dynamoDBMapper.scan(MedicationDO.class, queryExpression);
+
+        for(MedicationDO name: medNameList)
+        {
+            returnList.add(name);
+            Log.e("MyAlarmActivity","Med Name: " + name.getName() + " ArraySize: " + returnList.size());
+
+
+        }
+
+        return returnList;
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<MedicationDO> medNameDO) {
+        ArrayList<MedicationDO> temp = new ArrayList<>();
+        for(MedicationDO name: medNameDO)
+        {
+            temp.add(name);
+            Log.e("MyAlarmActivity","Med Name: " + name.getName() + " ArraySize: " + temp.size());
+        }
+        listener.onTaskCompleted(temp);
+        super.onPostExecute(temp);
+
+    }
+}
+
+interface OnTaskCompletedMedNames
+{
+    void onTaskCompleted(ArrayList<MedicationDO> medicationDOS);
 }

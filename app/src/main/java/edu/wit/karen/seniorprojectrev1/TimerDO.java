@@ -20,7 +20,7 @@ public class TimerDO {
     private String _dayOfWeek;
     private Double _fromMinute;
     private Boolean _isWindow;
-    private Set<String> _medName;
+    private String _medName;
     private Double _timerId;
     private Double _toHour;
     private Double _toMinute;
@@ -76,11 +76,11 @@ public class TimerDO {
         this._isWindow = _isWindow;
     }
     @DynamoDBAttribute(attributeName = "medName")
-    public Set<String> getMedName() {
+    public String getMedName() {
         return _medName;
     }
 
-    public void setMedName(final Set<String> _medName) {
+    public void setMedName(final String _medName) {
         this._medName = _medName;
     }
     @DynamoDBIndexRangeKey(attributeName = "timerId", globalSecondaryIndexName = "timers")

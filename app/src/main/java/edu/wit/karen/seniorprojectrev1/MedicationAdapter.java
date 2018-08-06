@@ -27,8 +27,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
         TextView nameText;
         TextView descView;
         Button buttonEdit;
-        Button buttonRefill;
-        EditText number;
+        TextView number;
 
 
 
@@ -76,7 +75,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
 
         final MedicationDO med = medItemListing.get(i);
 
-        itemViewHolder.number.setText( Integer.parseInt(med.getCurrentNum()));
+        itemViewHolder.number.setText(med.getCurrentNum());
         itemViewHolder.descView.setText(med.getInfo());
         itemViewHolder.nameText.setText(med.getName());
 
@@ -93,7 +92,7 @@ public class MedicationAdapter extends  RecyclerView.Adapter<MedicationAdapter.V
             String bundleMedMax = med.getMaxNum();
             Boolean bundleInfinite = med.getInfinite();
             Boolean notify = med.getNotify();
-            String notifyNumber = med.getNotify().toString();
+            String notifyNumber = med.getNotifyNum().toString();
 
             sendData.putString("name",bundleName);
             sendData.putString("desc",bundleDesc);
