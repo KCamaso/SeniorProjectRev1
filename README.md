@@ -4,7 +4,7 @@
 ![Logo](https://github.com/KCamaso/SeniorProjectRev1/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
 
 TimeRx is a medication timer meant for Android devices using AWS DynamoDB and AWS Pinpoint for user analytics that would be used by a doctor or medical provider.
-This application was a 
+This application was a first foray into using AWS into an Android Application with communication with an external database.
 ## How to Use
 
 1. Clone this repo as a new project in Android Studio
