@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         } catch (final AmazonClientException ex) {
             Log.e("MyMainActivity", "Unable to initialize PinpointManager. " + ex.getMessage(), ex);
         }
-        Log.e("MyMainActivity", "PINPOINT MANAGER INITIALIZED; YOU DID IT FAM");
+        Log.e("MyMainActivity", "PINPOINT MANAGER INITIALIZED");
 
 
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
 
         Log.e("MyMainActivity", "DYNAMODB CLIENT ACTIVATED");
-        Log.e("MyMainActivity", "THE USER ID IN MAIN ACTIVITY IS FUCKIN:" + userId);
+        Log.e("MyMainActivity", "THE USER ID IN MAIN ACTIVITY IS:" + userId);
 
 
 

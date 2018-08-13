@@ -138,7 +138,7 @@ public class AlarmFrag extends Fragment {
         final View view = inflater.inflate(R.layout.alarm_main, container, false);
         fab = view.findViewById(R.id.fab_alarm);
 
-        Log.e("MyAlarmActivity", "THE USER ID IN ALARM FRAGMENT IS FUCKIN:" + USER_ID);
+        Log.e("MyAlarmActivity", "ALARM USER ID: " + USER_ID);
 
         setupDynamoDB();
 
@@ -248,6 +248,7 @@ public class AlarmFrag extends Fragment {
 }
 
 
+// ASync Task in order to retrieve the alarm results from AWS
 class AlarmAsync extends AsyncTask<Void, Void, ArrayList<TimerDO>>
 {
     private OnTaskCompleted listener;
@@ -268,10 +269,12 @@ class AlarmAsync extends AsyncTask<Void, Void, ArrayList<TimerDO>>
         template.setUserId(USER_ID);
         template.setTimerId(1.0);
 
+        // The actual query setup.
         DynamoDBScanExpression queryExpression;
         queryExpression = new DynamoDBScanExpression();
 
 
+        // Saving as Paginated list, converting to normal list.
         PaginatedScanList<TimerDO> alarmList = AlarmFrag.dynamoDBMapper.scan(TimerDO.class, queryExpression);
 
         for(TimerDO timer: alarmList)

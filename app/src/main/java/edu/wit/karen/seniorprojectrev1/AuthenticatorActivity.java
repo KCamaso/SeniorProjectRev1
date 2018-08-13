@@ -49,11 +49,11 @@ public class AuthenticatorActivity extends Activity {
 
                             @Override
                             public void handleError(Exception exception) {
-                                Log.e("MyMainApplication", "FUCK THERE'S NO USER ID.");
+                                Log.e("MyMainApplication", "THERE'S NO USER ID.");
                             }
                         });
 
-                        Log.e("MyMainApplication", "FUCK THERE'S NO USER ID, IT'S: " + userId);
+                        Log.e("MyMainApplication", "THERE'S NO USER ID, IT'S: " + userId);
 
                     }
                 }).start();

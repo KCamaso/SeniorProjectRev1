@@ -89,7 +89,7 @@ public class HistoryFrag extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(container.getContext());
         recycList.setLayoutManager(mLayoutManager);
 
-    /*
+    /*  Test Display Code
         ArrayList<HistoryObj> list1 = new ArrayList<>();
         ArrayList<String> list2 = new ArrayList<>();
         list2.add("Medication 1");

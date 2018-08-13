@@ -34,6 +34,8 @@ import static java.security.AccessController.getContext;
 
 public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>{
 
+    // Adapts Alarm to RecyclerView List
+
     public ArrayList<TimerDO> mAlarms;
     public static CheckBox[] checkBoxes;
     public static class ViewHolder extends  RecyclerView.ViewHolder
@@ -103,7 +105,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, int i)
     {
-
+        // Setting Data into the object
             viewHolder.list.setText(mAlarms.get(i).getMedName());
             final TimerDO alarm = mAlarms.get(i);
             boolean active = alarm.getActive();
@@ -125,6 +127,7 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
             }
             else
             {
+
                 int fromHour = alarm.getFromHour().intValue();
                 int fromMinute = alarm.getFromMinute().intValue();
                 int toHour = alarm.getToHour().intValue();
@@ -149,6 +152,8 @@ public class AlarmAdapter extends  RecyclerView.Adapter<AlarmAdapter.ViewHolder>
         viewHolder.editButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Bundling data to send
                 Bundle sendData = new Bundle();
 
                 double[] bundleTimeFrom = { alarm.getFromHour(), alarm.getFromMinute()};
